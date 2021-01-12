@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B270925ACF86A00A07613 /* MapViewController.swift */; };
+		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
+		AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4B273225ACFF8800A07613 /* MapKit.framework */; };
 		ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */; };
 		ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */; };
 		ADD4AD6125AA5E0300D33DBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD5F25AA5E0300D33DBA /* Main.storyboard */; };
 		ADD4AD6325AA5E0400D33DBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD6225AA5E0400D33DBA /* Assets.xcassets */; };
 		ADD4AD6625AA5E0400D33DBA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD6425AA5E0400D33DBA /* LaunchScreen.storyboard */; };
-		ADD4AD7125AA5E0400D33DBA /* FlickrEyeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD7025AA5E0400D33DBA /* FlickrEyeTests.swift */; };
 		ADD4AD9625AA6ED600D33DBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ADD4AD9525AA6ED600D33DBA /* Alamofire */; };
+		ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF2A3C125AE5A75004B2EFF /* Extensions and helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +30,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD4B270925ACF86A00A07613 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerTests.swift; sourceTree = "<group>"; };
+		AD4B271C25ACFAE200A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		AD4B273225ACFF8800A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/iOSSupport/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
 		ADD4AD5625AA5E0300D33DBA /* FlickrEye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrEye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,8 +42,8 @@
 		ADD4AD6525AA5E0400D33DBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADD4AD6725AA5E0400D33DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADD4AD6C25AA5E0400D33DBA /* FlickrEyeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlickrEyeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADD4AD7025AA5E0400D33DBA /* FlickrEyeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrEyeTests.swift; sourceTree = "<group>"; };
 		ADD4AD7225AA5E0400D33DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADF2A3C125AE5A75004B2EFF /* Extensions and helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions and helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,18 +59,54 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD4B270D25ACF8C100A07613 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */,
+				ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		AD4B271025ACF8D700A07613 /* MapViewController */ = {
+			isa = PBXGroup;
+			children = (
+				AD4B270925ACF86A00A07613 /* MapViewController.swift */,
+			);
+			path = MapViewController;
+			sourceTree = "<group>";
+		};
+		AD4B271B25ACFAE200A07613 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD4B273225ACFF8800A07613 /* MapKit.framework */,
+				AD4B271C25ACFAE200A07613 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD4B273625ACFFED00A07613 /* MapViewController Tests */ = {
+			isa = PBXGroup;
+			children = (
+				AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */,
+			);
+			path = "MapViewController Tests";
+			sourceTree = "<group>";
+		};
 		ADD4AD4D25AA5E0300D33DBA = {
 			isa = PBXGroup;
 			children = (
 				ADD4AD5825AA5E0300D33DBA /* FlickrEye */,
 				ADD4AD6F25AA5E0400D33DBA /* FlickrEyeTests */,
 				ADD4AD5725AA5E0300D33DBA /* Products */,
+				AD4B271B25ACFAE200A07613 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,9 +122,10 @@
 		ADD4AD5825AA5E0300D33DBA /* FlickrEye */ = {
 			isa = PBXGroup;
 			children = (
-				ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */,
-				ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */,
+				AD4B270D25ACF8C100A07613 /* AppDelegate */,
 				ADD4AD5F25AA5E0300D33DBA /* Main.storyboard */,
+				ADF2A3C525AE5A9F004B2EFF /* Extensions and helpers */,
+				AD4B271025ACF8D700A07613 /* MapViewController */,
 				ADD4AD8C25AA6A8800D33DBA /* Assets */,
 				ADD4AD6725AA5E0400D33DBA /* Info.plist */,
 			);
@@ -91,8 +135,8 @@
 		ADD4AD6F25AA5E0400D33DBA /* FlickrEyeTests */ = {
 			isa = PBXGroup;
 			children = (
-				ADD4AD7025AA5E0400D33DBA /* FlickrEyeTests.swift */,
 				ADD4AD7225AA5E0400D33DBA /* Info.plist */,
+				AD4B273625ACFFED00A07613 /* MapViewController Tests */,
 			);
 			path = FlickrEyeTests;
 			sourceTree = "<group>";
@@ -104,6 +148,14 @@
 				ADD4AD6425AA5E0400D33DBA /* LaunchScreen.storyboard */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		ADF2A3C525AE5A9F004B2EFF /* Extensions and helpers */ = {
+			isa = PBXGroup;
+			children = (
+				ADF2A3C125AE5A75004B2EFF /* Extensions and helpers.swift */,
+			);
+			path = "Extensions and helpers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,6 +213,7 @@
 					};
 					ADD4AD6B25AA5E0400D33DBA = {
 						CreatedOnToolsVersion = 12.2;
+						LastSwiftMigration = 1220;
 						TestTargetID = ADD4AD5525AA5E0300D33DBA;
 					};
 				};
@@ -213,6 +266,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */,
+				ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */,
+				AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */,
 				ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,7 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADD4AD7125AA5E0400D33DBA /* FlickrEyeTests.swift in Sources */,
+				AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +469,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 45VBTWJ842;
 				INFOPLIST_FILE = FlickrEyeTests/Info.plist;
@@ -425,6 +481,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mohammedmirsal.FlickrEyeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlickrEye.app/FlickrEye";
@@ -436,6 +493,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 45VBTWJ842;
 				INFOPLIST_FILE = FlickrEyeTests/Info.plist;
