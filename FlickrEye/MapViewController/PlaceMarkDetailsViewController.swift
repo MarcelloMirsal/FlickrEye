@@ -29,16 +29,7 @@ class PlaceMarkDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupPanGesture()
         setupDetailsBlurViewLayer()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.isScrollEnabled = false
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        setupCollectionView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,6 +46,12 @@ class PlaceMarkDetailsViewController: UIViewController {
         currentPresentation = .dismissed
     }
     
+    fileprivate func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.isScrollEnabled = false
+    }
     
     func setupAnimator() {
         animator = UIViewPropertyAnimator(duration: 0.5, curve: UIView.AnimationCurve.linear  )
