@@ -10,6 +10,7 @@
 		AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B270925ACF86A00A07613 /* MapViewController.swift */; };
 		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
 		AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4B273225ACFF8800A07613 /* MapKit.framework */; };
+		AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */; };
 		ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */; };
 		ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */; };
 		ADD4AD6125AA5E0300D33DBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD5F25AA5E0300D33DBA /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 		AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerTests.swift; sourceTree = "<group>"; };
 		AD4B271C25ACFAE200A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AD4B273225ACFF8800A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/iOSSupport/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
+		AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsViewController.swift; sourceTree = "<group>"; };
 		ADD4AD5625AA5E0300D33DBA /* FlickrEye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrEye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 		AD4B271025ACF8D700A07613 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
+				AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */,
 				AD4B270925ACF86A00A07613 /* MapViewController.swift */,
 			);
 			path = MapViewController;
@@ -268,6 +271,7 @@
 				ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */,
 				ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */,
 				AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */,
+				AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */,
 				ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

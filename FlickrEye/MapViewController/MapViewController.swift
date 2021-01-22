@@ -11,10 +11,27 @@ import MapKit
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
-    
     // MARK:- View's Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        addPlaceMarkDetailsView()
+    }
+    
+    func addPlaceMarkDetailsView() {
+        let placeMarkDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController
+        placeMarkDetailsVC.mapViewController = self
+        let placeMarkDetailsView = placeMarkDetailsVC.view!
+        placeMarkDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addChild(placeMarkDetailsVC)
+        view.addSubview(placeMarkDetailsView)
+        NSLayoutConstraint.activate([
+            placeMarkDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            placeMarkDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            placeMarkDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.8)
+        ])
+        
     }
     
     @discardableResult
@@ -36,15 +53,17 @@ class MapViewController: UIViewController {
         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
             self.mapView.setCenter(annotation.coordinate, animated: false)
         }
-        
     }
+    
     
     // MARK:- Handlers
     @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             sender.isEnabled = false
-            selectLocation(at: sender.location(in: mapView))
+            let selectionPoint = sender.location(in: mapView)
+            selectLocation(at: selectionPoint)
+            
         default:
             sender.isEnabled = true
         }

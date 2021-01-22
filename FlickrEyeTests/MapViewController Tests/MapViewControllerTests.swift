@@ -29,9 +29,7 @@ class MapViewControllerTests: XCTestCase {
         let sender = UILongPressGestureRecognizer()
         // simulate tap gesture did begin (Disable the sender)
         sender.state = .began
-        
         sut.locationSelectionHandler(sender)
-        
         XCTAssertFalse(sender.isEnabled)
     }
     
@@ -45,12 +43,8 @@ class MapViewControllerTests: XCTestCase {
     
     func testSelectLocationAtCoordinate_() {
         let selectedPoint = CGPoint(x: 10, y: 10)
-        
         let selectedPointAnnotation = sut.selectLocation(at: selectedPoint)
-        
-        
         XCTAssertEqual(sut.mapView.annotations.first?.coordinate, selectedPointAnnotation.coordinate)
-        
     }
     
 }
