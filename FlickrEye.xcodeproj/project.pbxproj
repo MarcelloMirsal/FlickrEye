@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD07DD3225C0C27B00E0C2A1 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD07DD3125C0C27B00E0C2A1 /* NetworkService.swift */; };
 		AD0F44AA25BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F44A925BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift */; };
 		AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B270925ACF86A00A07613 /* MapViewController.swift */; };
 		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
 		AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4B273225ACFF8800A07613 /* MapKit.framework */; };
 		AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */; };
+		AD87EBB925BEB4C400285D05 /* FlickrService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBB825BEB4C400285D05 /* FlickrService.swift */; };
+		AD87EBBD25BEB90800285D05 /* FlickrServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */; };
+		AD87EBC125C0041400285D05 /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBC025C0041400285D05 /* FlickrPhoto.swift */; };
+		AD87EBC525C0227F00285D05 /* GeoLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBC425C0227F00285D05 /* GeoLocation.swift */; };
 		AD9105FF25BA580600C19A9B /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9105FE25BA580600C19A9B /* NetworkConstants.swift */; };
 		AD91060625BA582E00C19A9B /* NetworkConstantsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD91060525BA582E00C19A9B /* NetworkConstantsTests.swift */; };
-		AD91061125BA5CFC00C19A9B /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD91061025BA5CFC00C19A9B /* NetworkRequest.swift */; };
-		AD91061525BA5F3B00C19A9B /* NetworkRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD91061425BA5F3B00C19A9B /* NetworkRequestTests.swift */; };
-		AD91061925BA6C6D00C19A9B /* extensions and helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD91061825BA6C6D00C19A9B /* extensions and helpers.swift */; };
 		ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */; };
 		ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */; };
 		ADD4AD6125AA5E0300D33DBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD5F25AA5E0300D33DBA /* Main.storyboard */; };
@@ -37,17 +39,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD07DD3125C0C27B00E0C2A1 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AD0F44A925BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsViewControllerTests.swift; sourceTree = "<group>"; };
 		AD4B270925ACF86A00A07613 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerTests.swift; sourceTree = "<group>"; };
 		AD4B271C25ACFAE200A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AD4B273225ACFF8800A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/iOSSupport/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
 		AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsViewController.swift; sourceTree = "<group>"; };
+		AD87EBB825BEB4C400285D05 /* FlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrService.swift; sourceTree = "<group>"; };
+		AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrServiceTests.swift; sourceTree = "<group>"; };
+		AD87EBC025C0041400285D05 /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
+		AD87EBC425C0227F00285D05 /* GeoLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocation.swift; sourceTree = "<group>"; };
 		AD9105FE25BA580600C19A9B /* NetworkConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		AD91060525BA582E00C19A9B /* NetworkConstantsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkConstantsTests.swift; sourceTree = "<group>"; };
-		AD91061025BA5CFC00C19A9B /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
-		AD91061425BA5F3B00C19A9B /* NetworkRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestTests.swift; sourceTree = "<group>"; };
-		AD91061825BA6C6D00C19A9B /* extensions and helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extensions and helpers.swift"; sourceTree = "<group>"; };
 		ADD4AD5625AA5E0300D33DBA /* FlickrEye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrEye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD4AD5925AA5E0300D33DBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADD4AD5B25AA5E0300D33DBA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +84,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD25CD9525C02E2E006C7E09 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AD87EBC025C0041400285D05 /* FlickrPhoto.swift */,
+				AD87EBC425C0227F00285D05 /* GeoLocation.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		AD4B270D25ACF8C100A07613 /* AppDelegate */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,8 +132,9 @@
 		AD91060225BA580B00C19A9B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				AD07DD3125C0C27B00E0C2A1 /* NetworkService.swift */,
 				AD9105FE25BA580600C19A9B /* NetworkConstants.swift */,
-				AD91061025BA5CFC00C19A9B /* NetworkRequest.swift */,
+				AD87EBB825BEB4C400285D05 /* FlickrService.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -128,8 +142,8 @@
 		AD91060925BA583300C19A9B /* Networking Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */,
 				AD91060525BA582E00C19A9B /* NetworkConstantsTests.swift */,
-				AD91061425BA5F3B00C19A9B /* NetworkRequestTests.swift */,
 			);
 			path = "Networking Tests";
 			sourceTree = "<group>";
@@ -156,7 +170,6 @@
 		ADD4AD5825AA5E0300D33DBA /* FlickrEye */ = {
 			isa = PBXGroup;
 			children = (
-				AD91061825BA6C6D00C19A9B /* extensions and helpers.swift */,
 				AD4B270D25ACF8C100A07613 /* AppDelegate */,
 				ADD4AD5F25AA5E0300D33DBA /* Main.storyboard */,
 				ADF2A3C525AE5A9F004B2EFF /* Extensions and helpers */,
@@ -164,6 +177,7 @@
 				ADD4AD8C25AA6A8800D33DBA /* Assets */,
 				AD91060225BA580B00C19A9B /* Networking */,
 				ADD4AD6725AA5E0400D33DBA /* Info.plist */,
+				AD25CD9525C02E2E006C7E09 /* Models */,
 			);
 			path = FlickrEye;
 			sourceTree = "<group>";
@@ -302,12 +316,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD91061125BA5CFC00C19A9B /* NetworkRequest.swift in Sources */,
+				AD07DD3225C0C27B00E0C2A1 /* NetworkService.swift in Sources */,
 				AD9105FF25BA580600C19A9B /* NetworkConstants.swift in Sources */,
+				AD87EBC525C0227F00285D05 /* GeoLocation.swift in Sources */,
+				AD87EBB925BEB4C400285D05 /* FlickrService.swift in Sources */,
 				ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */,
+				AD87EBC125C0041400285D05 /* FlickrPhoto.swift in Sources */,
 				ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */,
 				AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */,
-				AD91061925BA6C6D00C19A9B /* extensions and helpers.swift in Sources */,
 				AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */,
 				ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */,
 			);
@@ -320,7 +336,7 @@
 				AD0F44AA25BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift in Sources */,
 				AD91060625BA582E00C19A9B /* NetworkConstantsTests.swift in Sources */,
 				AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */,
-				AD91061525BA5F3B00C19A9B /* NetworkRequestTests.swift in Sources */,
+				AD87EBBD25BEB90800285D05 /* FlickrServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

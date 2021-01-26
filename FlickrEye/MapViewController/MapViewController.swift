@@ -55,7 +55,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    
     // MARK:- Handlers
     @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {

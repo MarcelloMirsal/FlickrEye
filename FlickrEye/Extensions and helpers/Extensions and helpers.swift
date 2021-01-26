@@ -12,3 +12,10 @@ extension CLLocationCoordinate2D: Equatable {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
 }
+
+extension JSONDecoder {
+    convenience init(convertStrategy: JSONDecoder.KeyDecodingStrategy) {
+        self.init()
+        self.keyDecodingStrategy = convertStrategy
+    }
+}
