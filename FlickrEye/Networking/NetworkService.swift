@@ -15,12 +15,14 @@ protocol NetworkServiceParser {
 
 extension NetworkServiceParser {
     func parse<T: Codable>(objectType: T.Type, from data: Data) throws -> T {
+        let codableObjec: T
         do {
-            let codableObject = try jsonDecoder.decode(objectType, from: data)
-            return codableObject
-        } catch {
+            codableObjec = try jsonDecoder.decode(objectType, from: data)
+        }
+        catch {
             throw NetworkServiceError.jsonDecodingFailure
         }
+        return codableObjec
     }
 }
 

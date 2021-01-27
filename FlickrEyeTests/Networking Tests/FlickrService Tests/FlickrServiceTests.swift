@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import FlickrEye
+
 class FlickrServiceTests: XCTestCase {
     
     fileprivate var serviceRouterFake: RouterFake!
@@ -19,10 +20,9 @@ class FlickrServiceTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         if let _ = serviceRouterFake {
-            serviceRouterFake.localJSONManager.deleteResponseFile()
+            LocalJSONResponseManager.shared.deleteResponseFile()
         }
     }
-    
     
     func testRequestPhotosFeedWithSuccessfulResponse_PhotosFeedShouldBeNotNil() {
         arrangeSutWithFakeRouter(isSuccessfulResponse: true)
@@ -34,7 +34,6 @@ class FlickrServiceTests: XCTestCase {
             XCTAssertNotNil(photosFeed)
             exp.fulfill()
         }
-        
         waitForExpectations(timeout: 1, handler: nil)
     }
     
@@ -48,28 +47,53 @@ class FlickrServiceTests: XCTestCase {
             XCTAssertNil(photosFeed)
             exp.fulfill()
         }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testRequestPhotosFeedWithBadRequest_PhotosFeedShouldBeNil() {
+        arrangeSutWithFakeRouter_BadPhotosFeedURLRequest()
+        let exp = expectation(description: "testRequestPhotosFeedWithBadRequest")
+        let location = GeoLocation(lat: 48.85, lon: 2.29)
+        
+        sut.requestPhotosFeed(at: location) { (photosFeed, serviceError) in
+            XCTAssertNotNil(serviceError)
+            XCTAssertNil(photosFeed)
+            exp.fulfill()
+        }
         
         waitForExpectations(timeout: 1, handler: nil)
     }
     
     func arrangeSutWithFakeRouter(isSuccessfulResponse: Bool) {
-        serviceRouterFake = RouterFake()
         let jsonResponse = isSuccessfulResponse ? successfulRequestResponse : failedRequestResponse
-        serviceRouterFake.localJSONManager.write(jsonString: jsonResponse)
+        LocalJSONResponseManager.shared.write(jsonString: jsonResponse)
+        serviceRouterFake = RouterFake()
+        sut = .init(router: serviceRouterFake)
+    }
+    
+    func arrangeSutWithFakeRouter_BadPhotosFeedURLRequest() {
+        let badURL = URL(fileURLWithPath: "")
+        serviceRouterFake = RouterFake(photosFeedURLRequest: badURL)
         sut = .init(router: serviceRouterFake)
     }
 }
 
 // MARK:- Test Doubles
 fileprivate class RouterFake: FlickrService.Router {
-    let localJSONManager = LocalJSONResponseManager.shared
+    let photosFeedURLRequest: URL
+    
+    init(photosFeedURLRequest: URL = LocalJSONResponseManager.shared.localJSONFileURL()) {
+        self.photosFeedURLRequest = photosFeedURLRequest
+    }
+    
     override func requestForPhotosFeed(atLat lat: Double, atlon lon: Double) -> URLRequest {
-        return URLRequest(url: localJSONManager.localJSONFileURL())
+        return URLRequest(url: photosFeedURLRequest)
     }
 }
 
 // MARK:- Requests responses
 extension FlickrServiceTests {
+    
     var successfulRequestResponse: String {
         return """
 {
