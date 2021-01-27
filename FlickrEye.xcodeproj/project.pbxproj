@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AD07DD3225C0C27B00E0C2A1 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD07DD3125C0C27B00E0C2A1 /* NetworkService.swift */; };
+		AD07DD3625C0C5D800E0C2A1 /* LocalJSONResponseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD07DD3525C0C5D800E0C2A1 /* LocalJSONResponseManager.swift */; };
+		AD07DD4325C0D5E700E0C2A1 /* FlickrServiceRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD07DD4225C0D5E700E0C2A1 /* FlickrServiceRouter.swift */; };
 		AD0F44AA25BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F44A925BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift */; };
 		AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B270925ACF86A00A07613 /* MapViewController.swift */; };
 		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		AD07DD3125C0C27B00E0C2A1 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		AD07DD3525C0C5D800E0C2A1 /* LocalJSONResponseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalJSONResponseManager.swift; sourceTree = "<group>"; };
+		AD07DD4225C0D5E700E0C2A1 /* FlickrServiceRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrServiceRouter.swift; sourceTree = "<group>"; };
 		AD0F44A925BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsViewControllerTests.swift; sourceTree = "<group>"; };
 		AD4B270925ACF86A00A07613 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerTests.swift; sourceTree = "<group>"; };
@@ -84,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD07DD3925C0D45300E0C2A1 /* FlickrService Tests */ = {
+			isa = PBXGroup;
+			children = (
+				AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */,
+				AD07DD4225C0D5E700E0C2A1 /* FlickrServiceRouter.swift */,
+			);
+			path = "FlickrService Tests";
+			sourceTree = "<group>";
+		};
 		AD25CD9525C02E2E006C7E09 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,7 +155,8 @@
 		AD91060925BA583300C19A9B /* Networking Tests */ = {
 			isa = PBXGroup;
 			children = (
-				AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */,
+				AD07DD3925C0D45300E0C2A1 /* FlickrService Tests */,
+				AD07DD3525C0C5D800E0C2A1 /* LocalJSONResponseManager.swift */,
 				AD91060525BA582E00C19A9B /* NetworkConstantsTests.swift */,
 			);
 			path = "Networking Tests";
@@ -334,9 +348,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD0F44AA25BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift in Sources */,
+				AD07DD3625C0C5D800E0C2A1 /* LocalJSONResponseManager.swift in Sources */,
 				AD91060625BA582E00C19A9B /* NetworkConstantsTests.swift in Sources */,
 				AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */,
 				AD87EBBD25BEB90800285D05 /* FlickrServiceTests.swift in Sources */,
+				AD07DD4325C0D5E700E0C2A1 /* FlickrServiceRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
