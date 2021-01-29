@@ -7,9 +7,12 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
+    var placeMarkDetailsVC: PlaceMarkDetailsViewController!
+    let locationManager = CLLocationManager()
     
     // MARK:- View's Life Cycle
     override func viewDidLoad() {
@@ -17,9 +20,19 @@ class MapViewController: UIViewController {
         addPlaceMarkDetailsView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        requestLocationAuth()
+    }
+    
+    // MARK:- Location Manager
+    func requestLocationAuth() {
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    // MARK:- methods
     func addPlaceMarkDetailsView() {
-        let placeMarkDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController
-        placeMarkDetailsVC.mapViewController = self
+        placeMarkDetailsVC = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController)
         let placeMarkDetailsView = placeMarkDetailsVC.view!
         placeMarkDetailsView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -29,13 +42,13 @@ class MapViewController: UIViewController {
             placeMarkDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             placeMarkDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeMarkDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.8)
+            placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.9)
         ])
         
     }
     
     @discardableResult
-    func selectLocation(at point: CGPoint) -> MKAnnotation {
+    func markSelectedLocation(at point: CGPoint) -> MKAnnotation {
         let selectionCoordinate = coordinate(from: point)
         let selectedPointAnnotation = MKPointAnnotation()
         selectedPointAnnotation.coordinate = selectionCoordinate
@@ -55,14 +68,26 @@ class MapViewController: UIViewController {
         }
     }
     
+    func reversGeocode(for location: CLLocationCoordinate2D) {
+        let geoCoder = CLGeocoder()
+        geoCoder.reverseGeocodeLocation(.init(latitude: location.latitude, longitude: location.longitude), completionHandler: handleRevereseGecodingResponse)
+    }
+
+    lazy var handleRevereseGecodingResponse: ([CLPlacemark]? , Error?) -> () = { [weak self] (placeMarks, responseError) in
+        
+    }
+    
     // MARK:- Handlers
     @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             sender.isEnabled = false
-            let selectionPoint = sender.location(in: mapView)
-            selectLocation(at: selectionPoint)
             
+            let feedbackGenerator = UINotificationFeedbackGenerator()
+            feedbackGenerator.notificationOccurred(.success)
+            
+            let selectionPoint = sender.location(in: mapView)
+            markSelectedLocation(at: selectionPoint)
         default:
             sender.isEnabled = true
         }

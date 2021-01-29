@@ -27,6 +27,9 @@
 		ADD4AD6325AA5E0400D33DBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD6225AA5E0400D33DBA /* Assets.xcassets */; };
 		ADD4AD6625AA5E0400D33DBA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADD4AD6425AA5E0400D33DBA /* LaunchScreen.storyboard */; };
 		ADD4AD9625AA6ED600D33DBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ADD4AD9525AA6ED600D33DBA /* Alamofire */; };
+		ADEA0DE225C19DDC003B2F40 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA0DE125C19DDC003B2F40 /* LayoutManager.swift */; };
+		ADEA0DE725C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA0DE525C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift */; };
+		ADEA0DE825C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEA0DE625C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.xib */; };
 		ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF2A3C125AE5A75004B2EFF /* Extensions and helpers.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +68,9 @@
 		ADD4AD6725AA5E0400D33DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADD4AD6C25AA5E0400D33DBA /* FlickrEyeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlickrEyeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD4AD7225AA5E0400D33DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADEA0DE125C19DDC003B2F40 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
+		ADEA0DE525C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsHeaderView.swift; sourceTree = "<group>"; };
+		ADEA0DE625C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceMarkDetailsHeaderView.xib; sourceTree = "<group>"; };
 		ADF2A3C125AE5A75004B2EFF /* Extensions and helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions and helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,8 +124,11 @@
 		AD4B271025ACF8D700A07613 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
+				ADEA0DE525C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift */,
+				ADEA0DE625C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.xib */,
 				AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */,
 				AD4B270925ACF86A00A07613 /* MapViewController.swift */,
+				ADEA0DE125C19DDC003B2F40 /* LayoutManager.swift */,
 			);
 			path = MapViewController;
 			sourceTree = "<group>";
@@ -311,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADD4AD6625AA5E0400D33DBA /* LaunchScreen.storyboard in Resources */,
+				ADEA0DE825C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.xib in Resources */,
 				ADD4AD6325AA5E0400D33DBA /* Assets.xcassets in Resources */,
 				ADD4AD6125AA5E0300D33DBA /* Main.storyboard in Resources */,
 			);
@@ -335,10 +345,12 @@
 				AD87EBC525C0227F00285D05 /* GeoLocation.swift in Sources */,
 				AD87EBB925BEB4C400285D05 /* FlickrService.swift in Sources */,
 				ADD4AD5A25AA5E0300D33DBA /* AppDelegate.swift in Sources */,
+				ADEA0DE225C19DDC003B2F40 /* LayoutManager.swift in Sources */,
 				AD87EBC125C0041400285D05 /* FlickrPhoto.swift in Sources */,
 				ADF2A3C225AE5A75004B2EFF /* Extensions and helpers.swift in Sources */,
 				AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */,
 				AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */,
+				ADEA0DE725C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift in Sources */,
 				ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

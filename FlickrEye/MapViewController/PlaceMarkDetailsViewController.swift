@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import CoreLocation
+
 
 class PlaceMarkDetailsViewController: UIViewController {
     enum PresentationMode {
@@ -15,14 +17,14 @@ class PlaceMarkDetailsViewController: UIViewController {
     @IBOutlet weak var detailsBlurView: UIVisualEffectView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    weak var mapViewController: MapViewController?
+    var countryDescription: String = "Current User Location"
+    var detailsDescription: String = "Sub-description"
     
     lazy var dismissYLocation: CGFloat = 0
     lazy var presentYLocation: CGFloat = 0
     var currentFraction: CGFloat = 0
     var animator: UIViewPropertyAnimator!
     var currentPresentation: PresentationMode = .dismissed
-    
     
     // MARK:- View's life cycle
     override func viewDidLoad() {
@@ -41,23 +43,28 @@ class PlaceMarkDetailsViewController: UIViewController {
     // MARK:- setup methods
     func setViewAtDismissPresentation() {
         presentYLocation = view.frame.origin.y
-        dismissYLocation = view.frame.height
-        view.frame.origin.y = dismissYLocation
+        dismissYLocation = view.frame.height * 0.85
         currentPresentation = .dismissed
+        view.frame.origin.y = dismissYLocation
+        
     }
     
     fileprivate func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.isScrollEnabled = false
+        let collectionViewLayout = PlaceMarkDetailsLayout().photosFeedLayout()
+        collectionView.setCollectionViewLayout(collectionViewLayout, animated: true)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
+        let headerViewNib = UINib(nibName: "PlaceMarkDetailsHeaderView", bundle: nil)
+        collectionView.register(headerViewNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaceMarkDetailsHeaderView.id)
     }
     
     func setupAnimator() {
-        animator = UIViewPropertyAnimator(duration: 0.5, curve: UIView.AnimationCurve.linear  )
+        animator = UIViewPropertyAnimator(duration: 0.7, curve: UIView.AnimationCurve.linear  )
         animator.addAnimations {
             self.view.frame.origin.y = self.presentYLocation
-            self.mapViewController?.mapView.alpha = 0.75
         }
         animator.pausesOnCompletion = true
         animator.addObserver(self, forKeyPath: #keyPath(UIViewPropertyAnimator.isRunning), options: [.new], context: nil)
@@ -72,6 +79,13 @@ class PlaceMarkDetailsViewController: UIViewController {
         detailsBlurView.layer.maskedCorners = [ .layerMinXMinYCorner, .layerMaxXMinYCorner ]
         detailsBlurView.layer.cornerRadius = 24
         detailsBlurView.layer.masksToBounds = true
+    }
+    
+    func setLocationDescriptionInfo(from placeMark: CLPlacemark) {
+        let countryInfo = [ placeMark.country, placeMark.administrativeArea , placeMark.locality ].compactMap({$0}).joined(separator: " - ")
+        let locationDetailsInfo = [ placeMark.subAdministrativeArea , placeMark.subLocality, placeMark.name ].compactMap({$0}).joined(separator: ", ")
+        countryDescription = countryInfo
+        detailsDescription = locationDetailsInfo
     }
     
     // MARK:- handlers
@@ -142,18 +156,27 @@ extension PlaceMarkDetailsViewController {
 
 extension PlaceMarkDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        30
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemBackground
+        cell.backgroundColor = UIColor(displayP3Red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: collectionView.frame.width, height: 120)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaceMarkDetailsHeaderView.id, for: indexPath) as! PlaceMarkDetailsHeaderView
+        
+        headerView.countryLabel.text = countryDescription
+        headerView.detailsLabel.text = detailsDescription
+        return headerView
+    }
+    
 }
 
 

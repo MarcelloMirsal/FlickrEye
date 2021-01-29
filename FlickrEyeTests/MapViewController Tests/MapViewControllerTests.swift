@@ -43,7 +43,7 @@ class MapViewControllerTests: XCTestCase {
     
     func testSelectLocationAtCoordinate_() {
         let selectedPoint = CGPoint(x: 10, y: 10)
-        let selectedPointAnnotation = sut.selectLocation(at: selectedPoint)
+        let selectedPointAnnotation = sut.markSelectedLocation(at: selectedPoint)
         XCTAssertEqual(sut.mapView.annotations.first?.coordinate, selectedPointAnnotation.coordinate)
     }
     
