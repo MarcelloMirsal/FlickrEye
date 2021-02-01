@@ -25,7 +25,7 @@
                             </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iy5-G9-fJV"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Iy5-G9-fJV" firstAttribute="trailing" secondItem="hHl-jy-lHi" secondAttribute="trailing" id="QTb-IV-JmG"/>
                             <constraint firstAttribute="bottom" secondItem="hHl-jy-lHi" secondAttribute="bottom" id="TsZ-CR-rSq"/>
@@ -60,6 +60,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="428" height="882"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="j2G-Ft-kOq" customClass="Loading">
+                                            <rect key="frame" x="195.66666666666666" y="48" width="37" height="37"/>
+                                        </activityIndicatorView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TZ2-oY-VXq" userLabel="dragIndicator">
                                             <rect key="frame" x="192" y="8" width="44" height="8"/>
                                             <color key="backgroundColor" systemColor="systemGrayColor"/>
@@ -88,6 +91,8 @@
                                     </subviews>
                                     <gestureRecognizers/>
                                     <constraints>
+                                        <constraint firstItem="j2G-Ft-kOq" firstAttribute="centerX" secondItem="n8c-HO-xT4" secondAttribute="centerX" id="8wq-dE-BG6"/>
+                                        <constraint firstItem="j2G-Ft-kOq" firstAttribute="top" secondItem="TZ2-oY-VXq" secondAttribute="bottom" constant="32" id="NZf-kr-PLO"/>
                                         <constraint firstItem="8Zf-jB-7MW" firstAttribute="top" secondItem="TZ2-oY-VXq" secondAttribute="bottom" constant="8" id="Qhw-RZ-oLD"/>
                                         <constraint firstItem="TZ2-oY-VXq" firstAttribute="centerX" secondItem="n8c-HO-xT4" secondAttribute="centerX" id="gKu-Ot-ArP"/>
                                         <constraint firstItem="8Zf-jB-7MW" firstAttribute="leading" secondItem="n8c-HO-xT4" secondAttribute="leading" id="jac-Kz-KBz"/>
@@ -114,6 +119,7 @@
                     <connections>
                         <outlet property="collectionView" destination="8Zf-jB-7MW" id="yYY-a2-Jcf"/>
                         <outlet property="detailsBlurView" destination="Ins-zg-Vvv" id="Spa-2b-MXE"/>
+                        <outlet property="locationInfoLoadingIndicator" destination="j2G-Ft-kOq" id="2lq-xL-mez"/>
                         <outlet property="panGesture" destination="nIt-KC-VTd" id="lMh-qS-BQO"/>
                     </connections>
                 </viewController>

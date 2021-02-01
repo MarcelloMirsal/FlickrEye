@@ -9,30 +9,37 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol MapViewControllerDelegate: class {
+    func mapViewController(_ controller: MapViewController, didSelected selectedLocation: CLLocation)
+}
+
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
-    var placeMarkDetailsVC: PlaceMarkDetailsViewController!
     let locationManager = CLLocationManager()
+    weak var mapSelectionDelegate: MapViewControllerDelegate?
     
     // MARK:- View's Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager.delegate = self
         addPlaceMarkDetailsView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        requestLocationAuth()
+        startLocationUpdates()
     }
     
     // MARK:- Location Manager
-    func requestLocationAuth() {
-        locationManager.requestWhenInUseAuthorization()
+    func startLocationUpdates() {
+        let isAuthorizedWhenInUse = locationManager.authorizationStatus == .authorizedWhenInUse
+        isAuthorizedWhenInUse ? locationManager.startUpdatingLocation() : locationManager.stopUpdatingLocation()
     }
     
     // MARK:- methods
     func addPlaceMarkDetailsView() {
-        placeMarkDetailsVC = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController)
+        let placeMarkDetailsVC = PlaceMarkDetailsViewController.initiate(with: mapView)
+        mapSelectionDelegate = placeMarkDetailsVC
         let placeMarkDetailsView = placeMarkDetailsVC.view!
         placeMarkDetailsView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -60,36 +67,59 @@ class MapViewController: UIViewController {
         return mapView.convert(point, toCoordinateFrom: mapView)
     }
     
-    func setMap(annotation: MKAnnotation) {
-        mapView.removeAnnotations(mapView.annotations)
-        mapView.addAnnotation(annotation)
+    func location(from point: CGPoint) -> CLLocation {
+        let locationCoordinate = coordinate(from: point)
+        return .init(latitude: locationCoordinate.latitude , longitude: locationCoordinate.longitude)
+    }
+    
+    fileprivate func centerMapView(at location: CLLocation) {
         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
-            self.mapView.setCenter(annotation.coordinate, animated: false)
+            self.mapView.setCenter(location.coordinate, animated: false)
         }
     }
     
-    func reversGeocode(for location: CLLocationCoordinate2D) {
-        let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(.init(latitude: location.latitude, longitude: location.longitude), completionHandler: handleRevereseGecodingResponse)
+    func setMap(annotation: MKAnnotation) {
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
+        centerMapView(at: CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude))
     }
-
-    lazy var handleRevereseGecodingResponse: ([CLPlacemark]? , Error?) -> () = { [weak self] (placeMarks, responseError) in
-        
+    
+    fileprivate func generateSuccessFeedback() {
+        let feedbackGenerator = UINotificationFeedbackGenerator()
+        feedbackGenerator.notificationOccurred(.success)
     }
     
     // MARK:- Handlers
+    
     @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             sender.isEnabled = false
-            
-            let feedbackGenerator = UINotificationFeedbackGenerator()
-            feedbackGenerator.notificationOccurred(.success)
-            
+            generateSuccessFeedback()
             let selectionPoint = sender.location(in: mapView)
             markSelectedLocation(at: selectionPoint)
+            mapSelectionDelegate?.mapViewController(self, didSelected: location(from: selectionPoint))
         default:
             sender.isEnabled = true
         }
     }
+}
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            locationManager.stopUpdatingLocation()
+            mapSelectionDelegate?.mapViewController(self, didSelected: location)
+            centerMapView(at: location)
+        }
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+        } else {
+            manager.stopUpdatingLocation()
+        }
+    }
+    
 }
