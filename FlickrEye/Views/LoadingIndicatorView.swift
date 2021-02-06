@@ -9,18 +9,18 @@ import UIKit
 
 /// a protocol to show a loading indicator on ViewController,
 protocol LoadingIndicator: UIViewController {
-    var loadingIndicatorView: LoadingIndicatorView { get set }
+    var feedLoadingIndicatorView: LoadingIndicatorView { get set }
     /// called to add loadingIndicatorView to the view's hierarchy
-    func setupLoadingIndicatorView()
+    func setupFeedLoadinIndicator()
 }
 
 extension LoadingIndicator {
-    func setupLoadingIndicatorView() {
-        view.addSubview(loadingIndicatorView)
+    func setupFeedLoadinIndicator() {
+        view.addSubview(feedLoadingIndicatorView)
         NSLayoutConstraint.activate([
-            loadingIndicatorView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: -16),
-            loadingIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            feedLoadingIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            feedLoadingIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            feedLoadingIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 }
@@ -43,7 +43,7 @@ class LoadingIndicatorView: UIView {
         button.setTitleColor(.systemGray, for: .normal)
         button.setTitleColor(.systemGray, for: .disabled)
         button.setTitle("Tap here to reload data again.", for: .normal)
-        button.setTitle("LOADING", for: .disabled)
+        button.setTitle("LOADING...", for: .disabled)
         button.isEnabled = false
         return button
     }()

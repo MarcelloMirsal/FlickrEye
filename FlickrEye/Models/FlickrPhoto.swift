@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct FlickrPhoto {
+struct FlickrPhoto: Hashable {
     let id: String
     let owner: String
     let secret: String
@@ -25,6 +25,10 @@ extension FlickrPhoto {
         let server: String
         let farm: Int
         let title: String
+        
+        func map() -> FlickrPhoto {
+            return .init(id: id, owner: owner, secret: secret, server: server, farm: farm, title: title)
+        }
     }
 }
 
@@ -33,7 +37,7 @@ struct FlickrPhotosFeed {
     let pages: Int
     let perpage: Int
     let total: Int
-    let photos: FlickrPhoto
+    let photos: [FlickrPhoto]
 }
 
 extension FlickrPhotosFeed {
@@ -58,6 +62,12 @@ extension FlickrPhotosFeed {
             perpage = try responseFeed.decode(Int.self, forKey: .perpage)
             total = try responseFeed.decode(String.self, forKey: .total)
             photos = try responseFeed.decode([FlickrPhoto.DTO].self, forKey: .photos)
+        }
+        
+        func map() -> FlickrPhotosFeed {
+            let feedPhotos = self.photos.map({$0.map()})
+            let mappedObject = FlickrPhotosFeed(page: page, pages: pages, perpage: perpage, total: Int(total)!, photos: feedPhotos)
+            return mappedObject
         }
     }
 }

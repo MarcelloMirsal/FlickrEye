@@ -6,6 +6,12 @@
 //
 
 import MapKit
+import CoreLocation
+extension CLLocation {
+    func geoLocation() -> GeoLocation {
+        return .init(lat: coordinate.latitude, lon: coordinate.longitude)
+    }
+}
 
 extension CLLocationCoordinate2D: Equatable {
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {

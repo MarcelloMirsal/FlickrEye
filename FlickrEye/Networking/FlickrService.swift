@@ -6,7 +6,7 @@
 //
 
 
-import Foundation
+import UIKit
 import Alamofire
 
 final class FlickrService: NetworkServiceProtocol {
@@ -25,6 +25,17 @@ final class FlickrService: NetworkServiceProtocol {
         }
     }
     
+    func request(flickrPhoto: FlickrPhoto, completion: @escaping (UIImage) -> () ) {
+        let urlRequest = router.requestForPhoto(serverId: flickrPhoto.server, photoId: flickrPhoto.id, secret: flickrPhoto.secret)
+        AF.request(urlRequest).responseData { (dataResponse) in
+            guard let data = dataResponse.data, dataResponse.error == nil else  {
+                print("failed")
+                return
+            }
+            guard let photo = UIImage(data: data) else { return }
+            completion(photo)
+        }
+    }
 }
 
 extension FlickrService {
@@ -35,40 +46,50 @@ extension FlickrService {
 
 extension FlickrService {
     class Router {
-        // essential request params with apiKey
-        final private let baseURLString = "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1"
-        final let baseURLComponents: URLComponents
-        
-        init() {
-            var components = URLComponents(string: baseURLString)!
-            components.queryItems?.append(contentsOf: [
-                .init(name: Params.method.rawValue, value: Constants.searchMethod.rawValue),
-                .init(name: Params.apiKey.rawValue, value: Constants.apiKey.rawValue),
-                .init(name: Params.text.rawValue, value: "-"),
-                .init(name: Params.photosPerPage.rawValue, value: Constants.perPageResults.rawValue)
-            ])
-            self.baseURLComponents = components
-        }
+        // base url used to reduce URLComponents setup requirements
+        final private let photosFeedBaseURLString = "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1"
+        final private let photoBaseURLString = "https://live.staticflickr.com"
         
         func requestForPhotosFeed(atLat lat: Double, atlon lon: Double) -> URLRequest {
-            var photosRequestComponents = baseURLComponents
+            var photosRequestComponents = URLComponents(string: photosFeedBaseURLString)!
             photosRequestComponents.queryItems?.append(contentsOf: [
                 .init(name: Params.lat.rawValue, value: String(lat)),
                 .init(name: Params.lon.rawValue, value: String(lon)),
+                .init(name: Params.method.rawValue, value: Constants.searchMethod.rawValue),
+                .init(name: Params.apiKey.rawValue, value: Constants.apiKey.rawValue),
+                .init(name: Params.photosPerPage.rawValue, value: Constants.perPageResults.rawValue),
+                .init(name: Params.text.rawValue, value: "-")
             ])
             return URLRequest(url: photosRequestComponents.url!)
         }
+        
+        func requestForPhoto(serverId: String, photoId: String, secret: String) -> URLRequest {
+            let path = photoPath(serverId: serverId, photoId: photoId, secret: secret)
+            var photoRequestComponents = URLComponents(string: photoBaseURLString)!
+            photoRequestComponents.path = path
+            return URLRequest(url: photoRequestComponents.url!)
+        }
+        
+        final func photoPath(serverId: String, photoId: String, secret: String) -> String {
+            // serverId/photoId_secret_q.jpg
+            let photoId = "/\(photoId)_\(secret)_\(Constants.photoQuality.rawValue)"
+            let photoPath = "/\(serverId)" + photoId
+            return photoPath
+        }
+        
     }
 }
 
 
 extension FlickrService.Router {
     enum Constants: String, CaseIterable {
-        case host = "www.flickr.com"
-        case path = "/services/rest"
-        case searchMethod = "flickr.photos.search"
-        case perPageResults = "20"
         case apiKey = "2d8d865ab3daa6e8c5a14d33e733f56a"
+        case host = "www.flickr.com"
+        case photosHost = "live.staticflickr.com"
+        case path = "/services/rest/"
+        case searchMethod = "flickr.photos.search"
+        case perPageResults = "30"
+        case photoQuality = "q.jpg" // q.jpg = a thumbnail photo, size 150px.
     }
     
     enum Params: String, CaseIterable {

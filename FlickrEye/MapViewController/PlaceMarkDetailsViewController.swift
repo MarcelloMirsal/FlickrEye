@@ -11,10 +11,8 @@ import MapKit
 
 
 class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
-    enum PresentationMode {
-        case dismissed, presented
-    }
-    
+    enum PresentationMode { case dismissed, presented }
+    enum Section { case main }
     static func initiate(with mapView: MKMapView?) -> PlaceMarkDetailsViewController {
         let placeMarkDetailsVC = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController)
         placeMarkDetailsVC.mapView = mapView
@@ -24,17 +22,20 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     @IBOutlet weak var detailsBlurView: UIVisualEffectView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    @IBOutlet weak var locationInfoLoadingIndicator: UIActivityIndicatorView!
-    lazy var loadingIndicatorView: LoadingIndicatorView = {
-        .init(reloadingSelector: #selector(handleLoadingIndicatorReloadButton), target: self)
+    lazy var feedLoadingIndicatorView: LoadingIndicatorView = {
+        .init(reloadingSelector: #selector(handleReloadingAction), target: self)
     }()
     
+    var feedPhotoCellRegistration: UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>!
+    var headerViewRegistration: UICollectionView.SupplementaryRegistration<PlaceMarkDetailsHeaderView>!
+    var diffableDataSource: UICollectionViewDiffableDataSource<Section, FlickrPhoto>!
+    
+    let viewModel = PlaceMarkDetailsViewModel()
     weak var mapView: MKMapView?
     var currentPlaceMarkLocation: CLLocation!
     
     var countryDescription: String = ""
     var detailsDescription: String = ""
-    var numberOfData = 0
     
     lazy var dismissYLocation: CGFloat = 0
     lazy var presentYLocation: CGFloat = 0
@@ -42,55 +43,71 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     var animator: UIViewPropertyAnimator!
     var currentPresentation: PresentationMode = .dismissed
     
+    
+    
     // MARK:- View's life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPanGesture()
         setupDetailsBlurViewLayer()
         setupCollectionView()
-        locationInfoLoadingIndicator.startAnimating()
-        setupLoadingIndicatorView()
-        loadingIndicatorView.appearance(isHidden: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        setupCollectionViewRegistration()
+        setupCollectionViewDataSource()
+        setupFeedLoadinIndicator()
         setViewAtDismissPresentation()
         setupAnimator()
     }
     
     // MARK:- setup methods
-    
     func setViewAtDismissPresentation() {
         presentYLocation = view.frame.origin.y
-        dismissYLocation = view.frame.height * 0.85
+        dismissYLocation = view.frame.height * 0.65
         currentPresentation = .dismissed
         view.frame.origin.y = dismissYLocation
     }
     
     fileprivate func setupCollectionView() {
         collectionView.delegate = self
-        collectionView.dataSource = self
         collectionView.isScrollEnabled = false
         let collectionViewLayout = PlaceMarkDetailsLayout().photosFeedLayout()
         collectionView.setCollectionViewLayout(collectionViewLayout, animated: true)
-        
-        let feedPhotoCellNib = UINib(nibName: "FeedPhotoCell", bundle: nil)
-        collectionView.register(feedPhotoCellNib, forCellWithReuseIdentifier: "cell")
         
         let headerViewNib = UINib(nibName: "PlaceMarkDetailsHeaderView", bundle: nil)
         collectionView.register(headerViewNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaceMarkDetailsHeaderView.id)
     }
     
-    func setupAnimator() {
-        animator = UIViewPropertyAnimator(duration: 0.7, curve: UIView.AnimationCurve.linear  )
-        animator.addAnimations {
-            self.view.frame.origin.y = self.presentYLocation
-            self.mapView?.alpha = 0.85
+    func setupCollectionViewRegistration() {
+        let feedPhotoCellNib = UINib(nibName: "FeedPhotoCell", bundle: nil)
+        feedPhotoCellRegistration = UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>.init(cellNib: feedPhotoCellNib) { [weak self] (cell, indexPath, flickrPhoto) in
+            cell.backgroundColor = UIColor(displayP3Red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
+            self?.viewModel.request(flickrPhoto: flickrPhoto, completion: { (flickrPhotoImage) in
+                DispatchQueue.main.async {
+                    cell.imageView.image = flickrPhotoImage
+                }
+            })
         }
-        animator.pausesOnCompletion = true
-        animator.pauseAnimation()
-        animator.addObserver(self, forKeyPath: #keyPath(UIViewPropertyAnimator.isRunning), options: [.new], context: nil)
+        
+        let headerViewNib = UINib(nibName: "PlaceMarkDetailsHeaderView", bundle: nil)
+        headerViewRegistration =  UICollectionView.SupplementaryRegistration<PlaceMarkDetailsHeaderView>.init(supplementaryNib: headerViewNib, elementKind: UICollectionView.elementKindSectionHeader) { [weak self] (headerView, elementKind, indexPath) in
+            headerView.countryLabel.text = self?.countryDescription
+            headerView.detailsLabel.text = self?.detailsDescription
+        }
+    }
+    
+    func setupCollectionViewDataSource() {
+        diffableDataSource = UICollectionViewDiffableDataSource<Section, FlickrPhoto>(collectionView: collectionView) { [weak self] (collectionView, indexPath, flickrPhoto) -> UICollectionViewCell? in
+            guard let feedPhotoCellRegistration = self?.feedPhotoCellRegistration else { return nil }
+            return collectionView.dequeueConfiguredReusableCell(using: feedPhotoCellRegistration, for: indexPath, item: flickrPhoto)
+        }
+        
+        diffableDataSource.supplementaryViewProvider = { [weak self] (collectionView, elementKind,indexPath) -> UICollectionReusableView?  in
+            guard let headerViewRegistration = self?.headerViewRegistration else {
+                return nil
+            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerViewRegistration, for: indexPath) 
+        }
+        collectionView.dataSource = diffableDataSource
+        setInitialDataSourceSnpahot()
     }
     
     func setupPanGesture() {
@@ -104,6 +121,7 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         detailsBlurView.layer.masksToBounds = true
     }
     
+    // MARK:- Accessors methods
     func setLocationDescriptionInfo(from placeMark: CLPlacemark) {
         let countryInfo = [ placeMark.country, placeMark.administrativeArea , placeMark.locality ].compactMap({$0}).joined(separator: " - ")
         let locationDetailsInfo = [ placeMark.subAdministrativeArea , placeMark.subLocality, placeMark.name ].compactMap({$0}).joined(separator: ", ")
@@ -111,164 +129,99 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         detailsDescription = locationDetailsInfo
     }
     
-    func setLocationOfflineDescriptionInfo(from location: CLLocation) {
-        let info = "(\(location.coordinate.latitude)) - (\(location.coordinate.longitude))"
+    func setLocationOfflineDescriptionInfo() {
+        let info = "(\(currentPlaceMarkLocation.coordinate.latitude)) - (\(currentPlaceMarkLocation.coordinate.longitude))"
         countryDescription = info
         detailsDescription = ""
     }
     
-    func setCollectionViewAppearance(isHidden: Bool) {
-        UIView.animate(withDuration: 0.25) {
-            self.collectionView.alpha = isHidden ? 0 : 1
-            isHidden ? self.locationInfoLoadingIndicator.startAnimating() : self.locationInfoLoadingIndicator.stopAnimating()
-        }
+    func set(_ selectedLocation: CLLocation) {
+        self.currentPlaceMarkLocation = selectedLocation
     }
     
-    // MARK:- handlers
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(UIViewPropertyAnimator.isRunning){
-            // If the animator is paused
-            if !animator.isRunning && animator.fractionComplete == 1 {
-                animator.isReversed = !animator.isReversed
-                currentPresentation = animator.isReversed ? .presented : .dismissed
-                mapView?.isUserInteractionEnabled = animator.isReversed ? false : true
-                collectionView.isScrollEnabled = animator.isReversed
-                currentFraction = 0
-            }
-        }
+    // MARK:- Handle reloading action
+    @objc
+    func handleReloadingAction() {
+        feedLoadingIndicatorView.appearance(isHidden: false)
+        feedLoadingIndicatorView.setLoadingState(isLoading: true)
+        requestLocationInfo()
     }
     
-    // MARK:- location GeoCoding
-    func requestGeoCodingInfo(from location: CLLocation) {
-        let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(location) { [weak self] (placeMarks, responseError) in
-            guard responseError == nil, let placeMark = placeMarks?.first else {
-                // TODO: please try again message e.g
-                self?.handleFailedGeoCoding(at: location)
+    // MARK:- Location requests
+    func requestLocationInfo() {
+        setEmptyDataSourceSnapshot()
+        guard let _ = currentPlaceMarkLocation else { return }
+        viewModel.requestGeoCodingInfo(at: currentPlaceMarkLocation, completion: { (placeMark, errorMessage) in
+            guard let placeMark = placeMark, errorMessage == nil else {
+                self.requestInfoFailedHandler()
                 return
             }
-            self?.handleSucceessfulGeoCoding(for: placeMark)
+            self.requestInfoSuccessdHandler(placeMark: placeMark)
+        })
+    }
+    
+    // MARK:- Location requests handlers
+    fileprivate func requestInfoFailedHandler() {
+        feedLoadingIndicatorView.appearance(isHidden: false)
+        feedLoadingIndicatorView.setLoadingState(isLoading: false)
+        setLocationOfflineDescriptionInfo()
+        setEmptyDataSourceSnapshot()
+    }
+    
+    fileprivate func requestInfoSuccessdHandler(placeMark: CLPlacemark) {
+        feedLoadingIndicatorView.appearance(isHidden: false)
+        feedLoadingIndicatorView.setLoadingState(isLoading: true)
+        setLocationDescriptionInfo(from: placeMark)
+        setEmptyDataSourceSnapshot()
+        
+        viewModel.requestPhotosFeed(at: currentPlaceMarkLocation) { [weak self] (errorDescription) in
+            guard errorDescription == nil else {
+                self?.feedLoadingIndicatorView.setLoadingState(isLoading: false)
+                return
+            }
+            self?.setDataSourceSnapshot()
         }
     }
     
-    func handleFailedGeoCoding(at location: CLLocation) {
-        currentPlaceMarkLocation = location
-        setLocationOfflineDescriptionInfo(from: location)
-        setCollectionViewAppearance(isHidden: false)
-        removePhotosFeed()
-        loadingIndicatorView.appearance(isHidden: false)
-        loadingIndicatorView.setLoadingState(isLoading: false)
+    // MARK:- Diffable dataSource methods
+    fileprivate func setInitialDataSourceSnpahot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, FlickrPhoto>()
+        snapshot.appendSections([.main])
+        diffableDataSource.apply(snapshot)
     }
     
-    func handleSucceessfulGeoCoding(for placeMark: CLPlacemark) {
-        currentPlaceMarkLocation = placeMark.location
-        setLocationDescriptionInfo(from: placeMark)
-        setCollectionViewAppearance(isHidden: false)
-        requestPhotosFeed()
-        loadingIndicatorView.appearance(isHidden: true)
-        loadingIndicatorView.setLoadingState(isLoading: false)
+    /// used to present the header view only when geo-coding info is requested
+    fileprivate func setEmptyDataSourceSnapshot() {
+        guard !diffableDataSource.snapshot().sectionIdentifiers.isEmpty else {
+            setInitialDataSourceSnpahot()
+            return
+        }
+        var currentSnap = diffableDataSource.snapshot()
+        currentSnap.deleteItems(viewModel.photosFeed.photos)
+        currentSnap.reloadSections([.main])
+        diffableDataSource.apply(currentSnap)
     }
     
-    // MARK:- Photos Feed
-    func requestPhotosFeed() {
-        numberOfData = 10
-        collectionView.reloadData()
+    fileprivate func setDataSourceSnapshot() {
+        feedLoadingIndicatorView.appearance(isHidden: true)
+        var snapshot = NSDiffableDataSourceSnapshot<Section, FlickrPhoto>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(viewModel.photosFeed.photos, toSection: .main)
+        diffableDataSource.apply(snapshot)
     }
-    
-    func removePhotosFeed() {
-        numberOfData = 0
-        collectionView.reloadData()
-    }
-    
-    // MARK:- LoadingIndicator action handler
-    @objc
-    func handleLoadingIndicatorReloadButton() {
-        loadingIndicatorView.setLoadingState(isLoading: true)
-        requestGeoCodingInfo(from: currentPlaceMarkLocation)
-    }
-    
 }
 
-// MARK:- CollectionView Delegate & DataSource Implementation
-extension PlaceMarkDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberOfData
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FeedPhotoCell
-        let randomColor = UIColor(displayP3Red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
-        cell.backgroundColor = randomColor
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaceMarkDetailsHeaderView.id, for: indexPath) as! PlaceMarkDetailsHeaderView
-        headerView.countryLabel.text = countryDescription
-        headerView.detailsLabel.text = detailsDescription
-        return headerView
-    }
+// MARK:- CollectionView Delegate Implementation
+extension PlaceMarkDetailsViewController: UICollectionViewDelegate {
     
 }
 
 // MARK:- MapViewControllerDelegate Implementation
 extension PlaceMarkDetailsViewController:  MapViewControllerDelegate {
     func mapViewController(_ controller: MapViewController, didSelected selectedLocation: CLLocation) {
-        setCollectionViewAppearance(isHidden: true)
-        requestGeoCodingInfo(from: selectedLocation)
+        set(selectedLocation)
+        requestLocationInfo()
     }
-}
-
-
-
-// MARK:- Animation section
-extension PlaceMarkDetailsViewController {
-    @objc
-    func handle(panGesture: UIPanGestureRecognizer) {
-        let direction: CGFloat = animator.isReversed ? -1 : 1
-        let translation = panGesture.translation(in: view).y
-        let fraction = translation / ( -dismissYLocation ) * direction
-        
-        // to avoid animation and let collectionView scrolls down
-        if currentPresentation == .presented && collectionView.contentOffset.y > 0 {
-            return
-        }
-        // stop collectionView Scrolling and begin dismissing animation
-        else if currentPresentation == .presented && translation > 0 {
-            collectionView.isScrollEnabled = false
-        }
-        
-        switch panGesture.state {
-        case .began:
-            animator.pauseAnimation()
-            currentFraction = animator.fractionComplete
-        case .changed:
-            animator.fractionComplete =  currentFraction + fraction
-            scrollCollectionViewWhenAnimationCompleted(fraction: fraction, translation: translation)
-        case .ended:
-            let velocity = abs(panGesture.velocity(in: view).y)
-            
-            if velocity > 700 && translation < 0 {
-                animator.isReversed = false
-            } else if velocity > 700 && translation > 0 {
-                animator.isReversed = true
-            } else if animator.fractionComplete < 0.15 {
-                animator.isReversed = !animator.isReversed
-            }
-            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.25)
-        default:
-            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.25)
-        }
-    }
-    
-    fileprivate func scrollCollectionViewWhenAnimationCompleted(fraction: CGFloat, translation: CGFloat) {
-        if currentPresentation == .dismissed && animator.fractionComplete == 1 && translation < 0  {
-            let overCompletionFraction = fraction - 1
-            let yOffset = overCompletionFraction * view.frame.height
-            collectionView.contentOffset.y = yOffset
-        }
-    }
-    
 }
 
 // MARK:- UIGestureRecognizerDelegate implementation

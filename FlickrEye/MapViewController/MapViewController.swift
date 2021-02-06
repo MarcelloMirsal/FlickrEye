@@ -23,10 +23,6 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         locationManager.delegate = self
         addPlaceMarkDetailsView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         startLocationUpdates()
     }
     
@@ -108,8 +104,9 @@ class MapViewController: UIViewController {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            locationManager.stopUpdatingLocation()
+            manager.stopUpdatingLocation()
             mapSelectionDelegate?.mapViewController(self, didSelected: location)
+            // TODO: center the map only if its the first user location update
             centerMapView(at: location)
         }
     }

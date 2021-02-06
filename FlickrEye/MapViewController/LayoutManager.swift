@@ -11,29 +11,27 @@ class PlaceMarkDetailsLayout {
     
     func photosFeedLayout() -> UICollectionViewCompositionalLayout {
         
-        let topPhotoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1))
-        let topPhotoItem = NSCollectionLayoutItem(layoutSize: topPhotoItemSize)
+        let topPhotoItem = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1)))
+        topPhotoItem.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
+        let topPhotosGroup = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1/3)), subitem: topPhotoItem, count: 3)
         
-        let topPhotosGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth( (9/16) / 2 ))
-        let topPhotosGroup = NSCollectionLayoutGroup.horizontal(layoutSize: topPhotosGroupSize, subitem: topPhotoItem , count: 3)
+        let largePhotoItem = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1)))
+        largePhotoItem.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
         
-        let bottomLargePhotoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let bottomLargePhotoItem = NSCollectionLayoutItem(layoutSize: bottomLargePhotoItemSize)
-        let bottomLargePhotoGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1)), subitems: [bottomLargePhotoItem])
+        let smallPhotoItem = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5)))
+        smallPhotoItem.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
         
-        let bottomSmallPhotoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
-        let bottomSmallPhotoItem = NSCollectionLayoutItem(layoutSize: bottomSmallPhotoItemSize)
+        let smallPhotosGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1)), subitem: smallPhotoItem, count: 2)
         
-        let bottmSmallPhotosGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1)), subitem: bottomSmallPhotoItem, count: 2)
+        let largeAndSmallphotosGroup = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(2/3)), subitems: [largePhotoItem, smallPhotosGroup])
         
-        let bottomItemsGroup = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(9 / 16)), subitems: [bottmSmallPhotosGroup, bottomLargePhotoGroup])
-        
-        let mainFeedGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1000)), subitems: [topPhotosGroup, bottomItemsGroup])
+        let mainGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1000)), subitems: [ topPhotosGroup, largeAndSmallphotosGroup ])
         
         let sectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
         let sectionHeaderItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
-        let section = NSCollectionLayoutSection(group: mainFeedGroup)
+        let section = NSCollectionLayoutSection(group: mainGroup)
+        section.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
         section.boundarySupplementaryItems = [sectionHeaderItem]
         return UICollectionViewCompositionalLayout(section: section)
     }

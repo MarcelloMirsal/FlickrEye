@@ -29,6 +29,9 @@
                 <constraint firstItem="J7c-p4-Qop" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="pva-dQ-6Nh"/>
             </constraints>
             <size key="customSize" width="290" height="286"/>
+            <connections>
+                <outlet property="imageView" destination="J7c-p4-Qop" id="YoT-lT-SzA"/>
+            </connections>
             <point key="canvasLocation" x="311.59420289855075" y="166.74107142857142"/>
         </collectionViewCell>
     </objects>
