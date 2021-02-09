@@ -30,18 +30,19 @@ extension NetworkServiceParser {
 protocol NetworkServiceProtocol {
     var parser: NetworkServiceParser { get set }
     func request<T: Codable>(objectType: T.Type, urlRequest: URLRequest, response: @escaping (T?, NetworkServiceError?) -> ())
+    func requestData(urlRequest: URLRequest, response: @escaping (Data?, NetworkServiceError?) -> () )
 }
 
 extension NetworkServiceProtocol {
     
     func request<T: Codable>(objectType: T.Type, urlRequest: URLRequest, response: @escaping (T?, NetworkServiceError?) -> () ) {
-        AF.request(urlRequest).validate().responseJSON { (dataResponse) in
-            if let error = dataResponse.error {
+        AF.request(urlRequest).validate().responseJSON { (jsonDataResponse) in
+            if let error = jsonDataResponse.error {
                 let networkRequestError = AFErrorAdapter(aferror: error).getNetworkRequestError()
                 response(nil, .badNetworkRequest(networkRequestError) )
                 return
             }
-            guard let data = dataResponse.data else {
+            guard let data = jsonDataResponse.data else {
                 response(nil, .noDataFound)
                 return
             }
@@ -51,6 +52,21 @@ extension NetworkServiceProtocol {
             } catch {
                 response(nil, .jsonDecodingFailure)
             }
+        }
+    }
+    
+    func requestData(urlRequest: URLRequest, response: @escaping (Data?, NetworkServiceError?) -> () ) {
+        AF.request(urlRequest).validate().responseData { (dataResponse) in
+            if let error = dataResponse.error {
+                let networkRequestError = AFErrorAdapter(aferror: error).getNetworkRequestError()
+                response(nil, .badNetworkRequest(networkRequestError))
+                return
+            }
+            guard let data = dataResponse.data else {
+                response(nil, .noDataFound)
+                return
+            }
+            response(data, nil)
         }
     }
 }

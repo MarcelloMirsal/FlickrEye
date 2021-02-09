@@ -63,12 +63,17 @@ class LoadingIndicatorView: UIView {
         return nil
     }
     
-    func setLoadingState(isLoading: Bool) {
+    func set(isLoading: Bool, isHidden: Bool = false) {
+        setLoadingState(isLoading: isLoading)
+        setAppearance(isHidden: isHidden)
+    }
+    
+    private func setLoadingState(isLoading: Bool) {
         reloadingButton.isEnabled = !isLoading
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    func appearance(isHidden: Bool) {
+    private func setAppearance(isHidden: Bool) {
         self.isHidden = isHidden
     }
     

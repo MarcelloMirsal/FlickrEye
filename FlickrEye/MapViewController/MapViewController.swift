@@ -10,10 +10,12 @@ import MapKit
 import CoreLocation
 
 protocol MapViewControllerDelegate: class {
+    var mapView: MKMapView? { get set  }
     func mapViewController(_ controller: MapViewController, didSelected selectedLocation: CLLocation)
 }
 
 class MapViewController: UIViewController {
+    
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
     weak var mapSelectionDelegate: MapViewControllerDelegate?
@@ -34,8 +36,7 @@ class MapViewController: UIViewController {
     
     // MARK:- methods
     func addPlaceMarkDetailsView() {
-        let placeMarkDetailsVC = PlaceMarkDetailsViewController.initiate(with: mapView)
-        mapSelectionDelegate = placeMarkDetailsVC
+        let placeMarkDetailsVC = PlaceMarkDetailsViewController.initiate(with: self)
         let placeMarkDetailsView = placeMarkDetailsVC.view!
         placeMarkDetailsView.translatesAutoresizingMaskIntoConstraints = false
         

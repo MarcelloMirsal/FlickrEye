@@ -10,9 +10,10 @@ import UIKit
 import Alamofire
 
 final class FlickrService: NetworkServiceProtocol {
-    var parser: NetworkServiceParser = Parser()
-    let router: Router
     typealias FlickrPhotosFeedResponse = (FlickrPhotosFeed.DOT?, NetworkServiceError?) -> ()
+    
+    var parser: NetworkServiceParser = Parser()
+    private let router: Router
     
     init(router: Router = Router()) {
         self.router = router
@@ -25,14 +26,13 @@ final class FlickrService: NetworkServiceProtocol {
         }
     }
     
-    func request(flickrPhoto: FlickrPhoto, completion: @escaping (UIImage) -> () ) {
+    func request(flickrPhoto: FlickrPhoto, completion: @escaping (UIImage?) -> () ) {
         let urlRequest = router.requestForPhoto(serverId: flickrPhoto.server, photoId: flickrPhoto.id, secret: flickrPhoto.secret)
-        AF.request(urlRequest).responseData { (dataResponse) in
-            guard let data = dataResponse.data, dataResponse.error == nil else  {
-                print("failed")
+        requestData(urlRequest: urlRequest) { (data, serviceError) in
+            guard let photoData = data, serviceError == nil else  {
                 return
             }
-            guard let photo = UIImage(data: data) else { return }
+            let photo = UIImage(data: photoData)
             completion(photo)
         }
     }

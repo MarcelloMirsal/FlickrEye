@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct FlickrPhoto: Hashable {
     let id: String
     let owner: String

@@ -1,5 +1,5 @@
 //
-//  LayoutManager.swift
+//  PlaceMarkLayoutManager.swift
 //  FlickrEye
 //
 //  Created by Marcello Mirsal on 27/01/2021.
