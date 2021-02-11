@@ -22,6 +22,7 @@ enum NetworkServiceError: Error, Equatable {
     case badNetworkRequest(NetworkRequestError)
     case jsonDecodingFailure
     case noDataFound
+    case imageLoadingFailure
     var localizedDescription: String {
         switch self {
         case .badNetworkRequest(let requestError):
@@ -30,6 +31,8 @@ enum NetworkServiceError: Error, Equatable {
             return "parsing failed, please check the JSON response and the object codable keys"
         case .noDataFound:
             return "No data found, the json response could be empty."
+        case .imageLoadingFailure:
+            return "image loading failure, check network or URL."
         }
     }
 }

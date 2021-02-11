@@ -12,6 +12,7 @@
 		AD07DD4325C0D5E700E0C2A1 /* FlickrServiceRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD07DD4225C0D5E700E0C2A1 /* FlickrServiceRouterTests.swift */; };
 		AD0F44AA25BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F44A925BB6D2A0016D94D /* PlaceMarkDetailsViewControllerTests.swift */; };
 		AD3CDA8125D167A000019F39 /* PlaceMarkDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3CDA8025D167A000019F39 /* PlaceMarkDetailsViewModelTests.swift */; };
+		AD3CDA8E25D2D6DD00019F39 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD3CDA8D25D2D6DD00019F39 /* Kingfisher */; };
 		AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B270925ACF86A00A07613 /* MapViewController.swift */; };
 		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
 		AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4B273225ACFF8800A07613 /* MapKit.framework */; };
@@ -91,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD3CDA8E25D2D6DD00019F39 /* Kingfisher in Frameworks */,
 				ADD4AD9625AA6ED600D33DBA /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,6 +294,7 @@
 			name = FlickrEye;
 			packageProductDependencies = (
 				ADD4AD9525AA6ED600D33DBA /* Alamofire */,
+				AD3CDA8D25D2D6DD00019F39 /* Kingfisher */,
 			);
 			productName = FlickrEye;
 			productReference = ADD4AD5625AA5E0300D33DBA /* FlickrEye.app */;
@@ -345,6 +348,7 @@
 			mainGroup = ADD4AD4D25AA5E0300D33DBA;
 			packageReferences = (
 				ADD4AD9425AA6ED600D33DBA /* XCRemoteSwiftPackageReference "Alamofire" */,
+				AD3CDA8C25D2D6DD00019F39 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = ADD4AD5725AA5E0300D33DBA /* Products */;
 			projectDirPath = "";
@@ -680,6 +684,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AD3CDA8C25D2D6DD00019F39 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.1.0;
+			};
+		};
 		ADD4AD9425AA6ED600D33DBA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -691,6 +703,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AD3CDA8D25D2D6DD00019F39 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD3CDA8C25D2D6DD00019F39 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		ADD4AD9525AA6ED600D33DBA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADD4AD9425AA6ED600D33DBA /* XCRemoteSwiftPackageReference "Alamofire" */;

@@ -75,10 +75,11 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     func setupCollectionViewRegistration() {
         let feedPhotoCellNib = UINib(nibName: "FeedPhotoCell", bundle: nil)
         feedPhotoCellRegistration = UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>.init(cellNib: feedPhotoCellNib) { [weak self] (cell, indexPath, flickrPhoto) in
+            cell.imageView.image = nil
             cell.backgroundColor = UIColor(displayP3Red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
-            self?.viewModel.request(flickrPhoto: flickrPhoto, completion: { (flickrPhotoImage) in
+            self?.viewModel.request(flickrPhoto: flickrPhoto, completion: { (image) in
                 DispatchQueue.main.async {
-                    cell.imageView.image = flickrPhotoImage
+                    cell.imageView.image = image
                 }
             })
         }
