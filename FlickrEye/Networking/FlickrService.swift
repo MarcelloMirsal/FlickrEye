@@ -7,18 +7,10 @@
 
 
 import UIKit
-import Kingfisher
+import SDWebImage
 
 final class FlickrService: NetworkServiceProtocol {
     typealias FlickrPhotosFeedResponse = (FlickrPhotosFeed.DOT?, NetworkServiceError?) -> ()
-    
-    private let cache: ImageCache = {
-        let cache = ImageCache(name: "FlickrServicePhotosCache")
-        cache.memoryStorage.config.countLimit = 150
-        cache.diskStorage.config.sizeLimit = 250 * 1024 * 1024 // 250 MB
-        cache.diskStorage.config.expiration = .days(3)
-        return cache
-    }()
     
     var parser: NetworkServiceParser = Parser()
     private let router: Router
@@ -31,14 +23,6 @@ final class FlickrService: NetworkServiceProtocol {
         let urlRequest = router.requestForPhotosFeed(atLat: location.lat, atlon: location.lon)
         request(objectType: FlickrPhotosFeed.DOT.self, urlRequest: urlRequest) { (photosFeed, serviceError) in
             completion(photosFeed, serviceError)
-        }
-    }
-    
-    func request(flickrPhoto: FlickrPhoto, completion: @escaping (UIImage?) -> () ) {
-        let urlRequest = router.requestForPhoto(serverId: flickrPhoto.server, photoId: flickrPhoto.id, secret: flickrPhoto.secret)
-        requestImage(urlRequest: urlRequest, cache: cache) { (image, serviceError) in
-            print(serviceError?.localizedDescription ?? "")
-            completion(image)
         }
     }
 }

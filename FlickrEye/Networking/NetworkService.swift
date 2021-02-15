@@ -7,7 +7,6 @@
 
 import UIKit
 import Alamofire
-import Kingfisher
 
 protocol NetworkServiceParser {
     var jsonDecoder: JSONDecoder { get set }
@@ -31,7 +30,6 @@ extension NetworkServiceParser {
 protocol NetworkServiceProtocol {
     var parser: NetworkServiceParser { get set }
     func request<T: Codable>(objectType: T.Type, urlRequest: URLRequest, response: @escaping (T?, NetworkServiceError?) -> ())
-    func requestImage(urlRequest: URLRequest, cache: ImageCache?, response: @escaping (UIImage?, NetworkServiceError?) -> () )
 }
 
 extension NetworkServiceProtocol {
@@ -56,15 +54,4 @@ extension NetworkServiceProtocol {
         }
     }
     
-    func requestImage(urlRequest: URLRequest, cache: ImageCache? = nil, response: @escaping (UIImage?, NetworkServiceError?) -> () ) {
-        let imageRequestOptions: KingfisherOptionsInfo = [KingfisherOptionsInfoItem.targetCache(cache ?? ImageCache.default)]
-        
-        KingfisherManager.shared.retrieveImage(with: urlRequest.url!, options: imageRequestOptions) { (result) in
-            guard let image: UIImage = try? result.get().image else {
-                response(nil, .imageLoadingFailure)
-                return
-            }
-            response(image, nil)
-        }
-    }
 }

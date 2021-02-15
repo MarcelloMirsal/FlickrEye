@@ -7,6 +7,7 @@
 
 import CoreLocation
 import UIKit
+import SDWebImage
 
 
 
@@ -17,8 +18,9 @@ class PlaceMarkDetailsViewModel {
     private(set) var detailsDescription: String = ""
     private(set) var currentPlaceMarkLocation: CLLocation = .init()
     
-    private let gecoder = CLGeocoder()
+    private let geoCoder = CLGeocoder()
     private let flickrService: FlickrService
+    private let photosRepository: PhotosRepositoryProtocol = PhotosRepository()
     private(set) var viewDataSource: UICollectionViewDiffableDataSource<Section, FlickrPhoto>!
     
     init(flickrService: FlickrService = FlickrService() ){
@@ -28,7 +30,7 @@ class PlaceMarkDetailsViewModel {
     // MARK:- Accessors
     func set(viewDataSource: UICollectionViewDiffableDataSource<Section, FlickrPhoto>) {
         self.viewDataSource = viewDataSource
-        setInitialDataSourceSnpahot()
+        setInitialDataSourceSnapshot()
     }
     
     func setLocationDescriptionInfo(from placeMark: CLPlacemark) {
@@ -55,7 +57,7 @@ class PlaceMarkDetailsViewModel {
     
     // MARK:- Requests
     func requestGeoCodingInfo(completion: @escaping (CLPlacemark?, String? ) -> () ) {
-        gecoder.reverseGeocodeLocation(currentPlaceMarkLocation) { (placeMarks, requestError) in
+        geoCoder.reverseGeocodeLocation(currentPlaceMarkLocation) { (placeMarks, requestError) in
             guard requestError == nil, let placeMark = placeMarks?.first else {
                 completion(nil, requestError?.localizedDescription)
                 return
@@ -75,10 +77,9 @@ class PlaceMarkDetailsViewModel {
         }
     }
     
-    func request(flickrPhoto: FlickrPhoto, completion: @escaping (UIImage?) -> () ) {
-        flickrService.request(flickrPhoto: flickrPhoto) { (image) in
-            completion(image)
-        }
+    func request(flickrPhoto: FlickrPhoto, imageView: UIImageView?) {
+        let url = FlickrService.Router().requestForPhoto(serverId: flickrPhoto.server, photoId: flickrPhoto.id, secret: flickrPhoto.secret).url!
+        photosRepository.loadPhoto(url: url, toImageView: imageView)
     }
     
     // MARK:- Diffable dataSource methods
@@ -89,7 +90,7 @@ class PlaceMarkDetailsViewModel {
         viewDataSource.apply(newSnapshot)
     }
     
-    private func setInitialDataSourceSnpahot() {
+    private func setInitialDataSourceSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, FlickrPhoto>()
         snapshot.appendSections([.main])
         viewDataSource.apply(snapshot)
@@ -98,7 +99,7 @@ class PlaceMarkDetailsViewModel {
     /// used to present the header view only when geo-coding info is requested
     func setEmptyDataSourceSnapshot() {
         guard !viewDataSource.snapshot().sectionIdentifiers.isEmpty else {
-            setInitialDataSourceSnpahot()
+            setInitialDataSourceSnapshot()
             return
         }
         var currentSnap = viewDataSource.snapshot()

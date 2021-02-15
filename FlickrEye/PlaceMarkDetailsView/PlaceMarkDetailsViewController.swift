@@ -49,7 +49,7 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         setupCollectionView()
         setupCollectionViewRegistration()
         setupCollectionViewDataSource()
-        setupFeedLoadinIndicator()
+        setupFeedLoadingIndicator()
         setViewAtDismissPresentation()
         setupAnimator()
     }
@@ -75,13 +75,8 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     func setupCollectionViewRegistration() {
         let feedPhotoCellNib = UINib(nibName: "FeedPhotoCell", bundle: nil)
         feedPhotoCellRegistration = UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>.init(cellNib: feedPhotoCellNib) { [weak self] (cell, indexPath, flickrPhoto) in
-            cell.imageView.image = nil
-            cell.backgroundColor = UIColor(displayP3Red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
-            self?.viewModel.request(flickrPhoto: flickrPhoto, completion: { (image) in
-                DispatchQueue.main.async {
-                    cell.imageView.image = image
-                }
-            })
+            weak var weakImageViewRef = cell.imageView
+            self?.viewModel.request(flickrPhoto: flickrPhoto, imageView: weakImageViewRef)
         }
         
         let headerViewNib = UINib(nibName: "PlaceMarkDetailsHeaderView", bundle: nil)
@@ -135,7 +130,7 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
                 self?.requestInfoFailedHandler()
                 return
             }
-            self?.requestInfoSuccessdHandler(placeMark: placeMark)
+            self?.requestInfoSuccessHandler(placeMark: placeMark)
         }
     }
     
@@ -146,7 +141,7 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         viewModel.setEmptyDataSourceSnapshot()
     }
     
-    fileprivate func requestInfoSuccessdHandler(placeMark: CLPlacemark) {
+    fileprivate func requestInfoSuccessHandler(placeMark: CLPlacemark) {
         feedLoadingIndicatorView.set(isLoading: true)
         viewModel.setLocationDescriptionInfo(from: placeMark)
         viewModel.setEmptyDataSourceSnapshot()

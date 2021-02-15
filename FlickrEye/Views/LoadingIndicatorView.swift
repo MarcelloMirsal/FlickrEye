@@ -11,11 +11,11 @@ import UIKit
 protocol LoadingIndicator: UIViewController {
     var feedLoadingIndicatorView: LoadingIndicatorView { get set }
     /// called to add loadingIndicatorView to the view's hierarchy
-    func setupFeedLoadinIndicator()
+    func setupFeedLoadingIndicator()
 }
 
 extension LoadingIndicator {
-    func setupFeedLoadinIndicator() {
+    func setupFeedLoadingIndicator() {
         view.addSubview(feedLoadingIndicatorView)
         NSLayoutConstraint.activate([
             feedLoadingIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
