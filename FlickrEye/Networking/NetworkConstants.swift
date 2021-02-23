@@ -69,7 +69,7 @@ class AFErrorAdapter {
     
     func getNetworkRequestError() -> NetworkRequestError {
         let unSpecifiedErrorStatusCode = 0
-        
+        if aferror.responseCode == nil { return .noInternetConnection }
         switch aferror {
         case .sessionTaskFailed(let error as NSError):
             let statusCode = error.code

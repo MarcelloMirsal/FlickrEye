@@ -19,8 +19,8 @@ final class FlickrService: NetworkServiceProtocol {
         self.router = router
     }
     
-    func requestPhotosFeed(at location: GeoLocation, completion: @escaping FlickrPhotosFeedResponse) {
-        let urlRequest = router.requestForPhotosFeed(atLat: location.lat, atlon: location.lon)
+    func requestPhotosFeed(at location: GeoLocation, page: Int = 1, completion: @escaping FlickrPhotosFeedResponse) {
+        let urlRequest = router.requestForPhotosFeed(atLat: location.lat, atlon: location.lon, page: page)
         request(objectType: FlickrPhotosFeed.DOT.self, urlRequest: urlRequest) { (photosFeed, serviceError) in
             completion(photosFeed, serviceError)
         }
@@ -39,7 +39,7 @@ extension FlickrService {
         final private let photosFeedBaseURLString = "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1"
         final private let photoBaseURLString = "https://live.staticflickr.com"
         
-        func requestForPhotosFeed(atLat lat: Double, atlon lon: Double) -> URLRequest {
+        func requestForPhotosFeed(atLat lat: Double, atlon lon: Double, page: Int) -> URLRequest {
             var photosRequestComponents = URLComponents(string: photosFeedBaseURLString)!
             photosRequestComponents.queryItems?.append(contentsOf: [
                 .init(name: Params.lat.rawValue, value: String(lat)),
@@ -47,9 +47,13 @@ extension FlickrService {
                 .init(name: Params.method.rawValue, value: Constants.searchMethod.rawValue),
                 .init(name: Params.apiKey.rawValue, value: Constants.apiKey.rawValue),
                 .init(name: Params.photosPerPage.rawValue, value: Constants.perPageResults.rawValue),
-                .init(name: Params.text.rawValue, value: "-")
+                .init(name: Params.text.rawValue, value: "-"),
+                .init(name: Params.page.rawValue, value: "\(page)")
             ])
-            return URLRequest(url: photosRequestComponents.url!)
+            
+            var urlRequest = URLRequest(url: photosRequestComponents.url!)
+            urlRequest.timeoutInterval = 10
+            return urlRequest
         }
         
         func requestForPhoto(serverId: String, photoId: String, secret: String) -> URLRequest {
@@ -88,5 +92,6 @@ extension FlickrService.Router {
         case lat = "lat"
         case lon = "lon"
         case photosPerPage = "per_page"
+        case page = "page"
     }
 }

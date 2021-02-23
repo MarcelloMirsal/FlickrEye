@@ -8,19 +8,19 @@
 import UIKit
 
 /// a protocol to show a loading indicator on ViewController,
-protocol LoadingIndicator: UIViewController {
-    var feedLoadingIndicatorView: LoadingIndicatorView { get set }
+protocol LoadingIndicator {
+    var loadingIndicatorView: LoadingIndicatorView { get set }
     /// called to add loadingIndicatorView to the view's hierarchy
     func setupFeedLoadingIndicator()
 }
 
-extension LoadingIndicator {
+extension LoadingIndicator where Self: UIViewController {
     func setupFeedLoadingIndicator() {
-        view.addSubview(feedLoadingIndicatorView)
+        view.addSubview(loadingIndicatorView)
         NSLayoutConstraint.activate([
-            feedLoadingIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            feedLoadingIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            feedLoadingIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            loadingIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadingIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 }
@@ -48,9 +48,13 @@ class LoadingIndicatorView: UIView {
         return button
     }()
     
+    func setAction(target: Any, reloadingSelector: Selector) {
+        reloadingButton.addTarget(target, action: reloadingSelector, for: .touchUpInside)
+    }
+    
     convenience init(reloadingSelector: Selector, target: Any) {
         self.init(frame: .zero)
-        reloadingButton.addTarget(target, action: reloadingSelector, for: .touchUpInside)
+        setAction(target: target, reloadingSelector: reloadingSelector)
     }
     
     override init(frame: CGRect) {

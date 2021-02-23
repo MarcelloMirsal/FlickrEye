@@ -30,9 +30,12 @@ class PlaceMarkDetailsLayout {
         let sectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
         let sectionHeaderItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
+        let sectionFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+        let sectionFooterItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionFooterSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+        
         let section = NSCollectionLayoutSection(group: mainGroup)
         section.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
-        section.boundarySupplementaryItems = [sectionHeaderItem]
+        section.boundarySupplementaryItems = [sectionHeaderItem, sectionFooterItem]
         return UICollectionViewCompositionalLayout(section: section)
     }
 }

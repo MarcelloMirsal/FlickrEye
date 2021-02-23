@@ -10,12 +10,12 @@ import XCTest
 
 class FlickrServiceRouterTests: XCTestCase {
     let Constants = FlickrService.Router.Constants.self
-    let Params = FlickrService.Router.Constants.self
+    let Params = FlickrService.Router.Params.self
     var sut: FlickrService.Router!
     
     let lat = 53.486530011539585
     let lon = -2.2573716726007778
-    lazy var idealPhotosFeedURLString = "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=flickr.photos.search&api_key=2d8d865ab3daa6e8c5a14d33e733f56a&text=-&per_page=\(Constants.perPageResults.rawValue)&lat=\(lat)&lon=\(lon)"
+    lazy var idealPhotosFeedURLString = "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=flickr.photos.search&api_key=2d8d865ab3daa6e8c5a14d33e733f56a&text=-&per_page=\(Constants.perPageResults.rawValue)&lat=\(lat)&lon=\(lon)&\(Params.page.rawValue)=1"
     
     override func setUp() {
         sut = .init()
@@ -23,7 +23,7 @@ class FlickrServiceRouterTests: XCTestCase {
     
     func testRequestForPhotosFeed_ShouleReturnURLComponentsEqualTo() {
         let idealPhotoFeedURLComponents = URLComponents(string: idealPhotosFeedURLString)!
-        let photosFeedURL = sut.requestForPhotosFeed(atLat: lat, atlon: lon).url!
+        let photosFeedURL = sut.requestForPhotosFeed(atLat: lat, atlon: lon, page: 1).url!
         let photosFeedURLCompoents = URLComponents(url: photosFeedURL, resolvingAgainstBaseURL: false)!
         
         XCTAssertEqual(photosFeedURLCompoents.scheme, NetworkConstants.scheme.rawValue)

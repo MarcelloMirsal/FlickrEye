@@ -7,7 +7,16 @@
 
 import Foundation
 
+
+struct Pagination {
+    let page: Int
+    let pages: Int
+    let perPage: Int
+    let total: Int
+}
+
 struct FlickrPhoto: Hashable {
+    let uuid = UUID()
     let id: String
     let owner: String
     let secret: String
@@ -32,10 +41,7 @@ extension FlickrPhoto {
 }
 
 struct FlickrPhotosFeed {
-    let page: Int
-    let pages: Int
-    let perpage: Int
-    let total: Int
+    let pagination: Pagination
     let photos: [FlickrPhoto]
 }
 
@@ -43,12 +49,12 @@ extension FlickrPhotosFeed {
     struct DOT: Codable {
         let page: Int
         let pages: Int
-        let perpage: Int
+        let perPage: Int
         let total: String
         let photos: [FlickrPhoto.DTO]
         
         enum Custom: String, CodingKey {
-            case page, pages, perpage, total
+            case page, pages, perPage = "perpage", total
             case photosFeedResponse = "photos"
             case photos = "photo"
         }
@@ -58,14 +64,15 @@ extension FlickrPhotosFeed {
             let responseFeed = try responseContainer.nestedContainer(keyedBy: Custom.self, forKey: .photosFeedResponse)
             page = try responseFeed.decode(Int.self, forKey: .page)
             pages = try responseFeed.decode(Int.self, forKey: .pages)
-            perpage = try responseFeed.decode(Int.self, forKey: .perpage)
+            perPage = try responseFeed.decode(Int.self, forKey: .perPage)
             total = try responseFeed.decode(String.self, forKey: .total)
             photos = try responseFeed.decode([FlickrPhoto.DTO].self, forKey: .photos)
         }
         
         func map() -> FlickrPhotosFeed {
             let feedPhotos = self.photos.map({$0.map()})
-            let mappedObject = FlickrPhotosFeed(page: page, pages: pages, perpage: perpage, total: Int(total)!, photos: feedPhotos)
+            let pagination = Pagination(page: page, pages: pages, perPage: perPage, total: Int(total)! )
+            let mappedObject = FlickrPhotosFeed(pagination: pagination, photos: feedPhotos)
             return mappedObject
         }
     }

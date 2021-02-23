@@ -17,10 +17,12 @@ class PlaceMarkDetailsViewModel {
     private(set) var countryDescription: String = ""
     private(set) var detailsDescription: String = ""
     private(set) var currentPlaceMarkLocation: CLLocation = .init()
+    private var isNextPageRequestInProgress = false
     
     private let geoCoder = CLGeocoder()
     private let flickrService: FlickrService
     private let photosRepository: PhotosRepositoryProtocol = PhotosRepository()
+    private var pagination: Pagination = .init(page: 1, pages: 1, perPage: 1, total: 0)
     private(set) var viewDataSource: UICollectionViewDiffableDataSource<Section, FlickrPhoto>!
     
     init(flickrService: FlickrService = FlickrService() ){
@@ -34,6 +36,7 @@ class PlaceMarkDetailsViewModel {
     }
     
     func setLocationDescriptionInfo(from placeMark: CLPlacemark) {
+        print("did set desc info")
         let countryInfo = [ placeMark.country, placeMark.administrativeArea , placeMark.locality ].compactMap({$0}).joined(separator: " - ")
         let locationDetailsInfo = [ placeMark.subAdministrativeArea , placeMark.subLocality, placeMark.name ].compactMap({$0}).joined(separator: ", ")
         countryDescription = countryInfo
@@ -47,34 +50,57 @@ class PlaceMarkDetailsViewModel {
     }
     
     func setLocationDescriptionsToLoading() {
-        countryDescription = "Loading..."
+        countryDescription = "please wait..."
         detailsDescription = ""
     }
     
     func set(_ selectedLocation: CLLocation) {
         self.currentPlaceMarkLocation = selectedLocation
+        set(pagination: Pagination.init(page: 1, pages: 1, perPage: 1, total: 0))
+    }
+    
+    func set(pagination: Pagination) {
+        self.pagination = pagination
+    }
+    
+    func canLoadNextPage() -> Bool {
+        return pagination.page != pagination.pages
     }
     
     // MARK:- Requests
-    func requestGeoCodingInfo(completion: @escaping (CLPlacemark?, String? ) -> () ) {
+    func requestGeoCodingInfo(completion: @escaping (String?) -> () ) {
         geoCoder.reverseGeocodeLocation(currentPlaceMarkLocation) { (placeMarks, requestError) in
             guard requestError == nil, let placeMark = placeMarks?.first else {
-                completion(nil, requestError?.localizedDescription)
+                self.setLocationDescriptionsWithCoordinateInfo()
+                completion(requestError?.localizedDescription)
                 return
             }
-            completion(placeMark, nil)
+            self.setLocationDescriptionInfo(from: placeMark)
+            completion(nil)
         }
     }
     
-    func requestPhotosFeed(completion: @escaping (String?) -> () ) {
-        flickrService.requestPhotosFeed(at: currentPlaceMarkLocation.geoLocation()) { [weak self] (photosFeedDTO, serviceError) in
+    func requestPhotosFeed(page: Int = 1, completion: @escaping (String?) -> () ) {
+        flickrService.requestPhotosFeed(at: currentPlaceMarkLocation.geoLocation(), page: page) { [weak self] (photosFeedDTO, serviceError) in
+            defer { self?.isNextPageRequestInProgress = false }
             guard let photosFeed = photosFeedDTO?.map(), serviceError == nil else {
                 completion(serviceError?.localizedDescription)
                 return
             }
-            self?.setViewDataSourceSnapshot(from: photosFeed)
+            self?.set(pagination: photosFeed.pagination)
+            self?.appendViewDataSourceItems(from: photosFeed)
             completion(nil)
         }
+    }
+    
+    func requestPhotosFeedNextPage( completion: @escaping (String?) -> () ) {
+        guard canLoadNextPage(), isNextPageRequestInProgress == false else {
+            return
+        }
+        print("pass")
+        isNextPageRequestInProgress = true
+        let page = pagination.page+1
+        requestPhotosFeed(page: page, completion: completion)
     }
     
     func request(flickrPhoto: FlickrPhoto, imageView: UIImageView?) {
@@ -83,11 +109,12 @@ class PlaceMarkDetailsViewModel {
     }
     
     // MARK:- Diffable dataSource methods
-    func setViewDataSourceSnapshot(from photosFeed: FlickrPhotosFeed) {
-        var newSnapshot = NSDiffableDataSourceSnapshot<Section, FlickrPhoto>()
-        newSnapshot.appendSections([.main])
-        newSnapshot.appendItems(photosFeed.photos, toSection: .main)
-        viewDataSource.apply(newSnapshot)
+    func appendViewDataSourceItems(from photosFeed: FlickrPhotosFeed) {
+        var snapshot = viewDataSource.snapshot()
+        snapshot.appendItems(photosFeed.photos, toSection: .main)
+        DispatchQueue.main.async {
+            self.viewDataSource.apply(snapshot)
+        }
     }
     
     private func setInitialDataSourceSnapshot() {
@@ -96,7 +123,7 @@ class PlaceMarkDetailsViewModel {
         viewDataSource.apply(snapshot)
     }
     
-    /// used to present the header view only when geo-coding info is requested
+    /// used to present the header & footer view only when geo-coding info is requested
     func setEmptyDataSourceSnapshot() {
         guard !viewDataSource.snapshot().sectionIdentifiers.isEmpty else {
             setInitialDataSourceSnapshot()
@@ -106,5 +133,25 @@ class PlaceMarkDetailsViewModel {
         currentSnap.deleteItems(currentSnap.itemIdentifiers)
         currentSnap.reloadSections([.main])
         viewDataSource.apply(currentSnap)
+    }
+}
+
+
+
+class CancelableOperation: Operation {
+    
+    init(task: @escaping () -> ()) {
+        self.task = task
+    }
+    
+    
+    let task: () -> ()
+    
+    override func main() {
+        
+    }
+    
+    override func start() {
+        
     }
 }

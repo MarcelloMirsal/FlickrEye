@@ -10,7 +10,7 @@ import CoreLocation
 import MapKit
 
 
-class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
+class PlaceMarkDetailsViewController: UIViewController {
     enum PresentationMode { case dismissed, presented }
     typealias Section = PlaceMarkDetailsViewModel.Section
     
@@ -24,12 +24,10 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     @IBOutlet weak var detailsBlurView: UIVisualEffectView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    lazy var feedLoadingIndicatorView: LoadingIndicatorView = {
-        .init(reloadingSelector: #selector(handleReloadingAction), target: self)
-    }()
     
     var feedPhotoCellRegistration: UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>!
     var headerViewRegistration: UICollectionView.SupplementaryRegistration<PlaceMarkDetailsHeaderView>!
+    var footerViewRegistration: UICollectionView.SupplementaryRegistration<PaginationLoadingIndicatorView>!
     
     let viewModel = PlaceMarkDetailsViewModel()
     weak var mapView: MKMapView?
@@ -49,7 +47,6 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         setupCollectionView()
         setupCollectionViewRegistration()
         setupCollectionViewDataSource()
-        setupFeedLoadingIndicator()
         setViewAtDismissPresentation()
         setupAnimator()
     }
@@ -84,6 +81,14 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
             headerView.countryLabel.text = self?.viewModel.countryDescription
             headerView.detailsLabel.text = self?.viewModel.detailsDescription
         }
+        
+        footerViewRegistration = UICollectionView.SupplementaryRegistration<PaginationLoadingIndicatorView>(elementKind: UICollectionView.elementKindSectionFooter, handler: { [weak self] (paginationFooterView, kind, indexPath) in
+            guard let strongSelf = self else { return }
+            paginationFooterView.loadingIndicatorView.setAction(target: strongSelf, reloadingSelector: #selector(strongSelf.handleReloadingAction))
+            paginationFooterView.loadingIndicatorView.set(isLoading: false, isHidden: true)
+        })
+        
+        
     }
     
     func setupCollectionViewDataSource() {
@@ -93,10 +98,17 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
         }
         
         diffableDataSource.supplementaryViewProvider = { [weak self] (collectionView, elementKind,indexPath) -> UICollectionReusableView?  in
-            guard let headerViewRegistration = self?.headerViewRegistration else {
+            
+            guard let headerViewRegistration = self?.headerViewRegistration, let footerViewRegistration = self?.footerViewRegistration else {
                 return nil
             }
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerViewRegistration, for: indexPath) 
+            if elementKind == UICollectionView.elementKindSectionHeader {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: headerViewRegistration, for: indexPath)
+            } else if elementKind == UICollectionView.elementKindSectionFooter {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footerViewRegistration, for: indexPath)
+            } else {
+                return nil
+            }
         }
         collectionView.dataSource = diffableDataSource
         viewModel.set(viewDataSource: diffableDataSource)
@@ -116,49 +128,71 @@ class PlaceMarkDetailsViewController: UIViewController, LoadingIndicator {
     // MARK:- Handle reloading action
     @objc
     func handleReloadingAction() {
-        feedLoadingIndicatorView.set(isLoading: true)
-        requestLocationInfo()
+        updatePaginationLoadingFooter(isLoading: true)
+        if viewModel.viewDataSource.snapshot().itemIdentifiers.isEmpty {
+            requestLocationInfo()
+        } else {
+            requestPhotosFeedNextPage()
+        }
     }
     
-    // MARK:- Location requests
+    // MARK:- Photos feed Request
+    func requestPhotosFeed() {
+        viewModel.requestPhotosFeed { [weak self] (errorDescription) in
+            guard errorDescription == nil else {
+                self?.updatePaginationLoadingFooter(isLoading: false)
+                return
+            }
+        }
+    }
+    
+    func requestPhotosFeedNextPage() {
+        viewModel.requestPhotosFeedNextPage { (errorDescription) in
+            self.updatePaginationLoadingFooter(isLoading: errorDescription == nil)
+        }
+    }
+    
+    // MARK:- Location info request
     func requestLocationInfo() {
         viewModel.setLocationDescriptionsToLoading()
         viewModel.setEmptyDataSourceSnapshot()
-        feedLoadingIndicatorView.set(isLoading: true)
-        viewModel.requestGeoCodingInfo { [weak self] (placeMark, errorMessage) in
-            guard let placeMark = placeMark, errorMessage == nil else {
+        updatePaginationLoadingFooter(isLoading: true)
+        viewModel.requestGeoCodingInfo { [weak self] (errorMessage) in
+            guard errorMessage == nil else {
                 self?.requestInfoFailedHandler()
                 return
             }
-            self?.requestInfoSuccessHandler(placeMark: placeMark)
+            self?.requestInfoSuccessHandler()
         }
     }
     
-    // MARK:- Location requests handlers
+    // MARK:- Location info requests handlers
     fileprivate func requestInfoFailedHandler() {
-        feedLoadingIndicatorView.set(isLoading: false)
-        viewModel.setLocationDescriptionsWithCoordinateInfo()
         viewModel.setEmptyDataSourceSnapshot()
+        updatePaginationLoadingFooter(isLoading: false)
     }
     
-    fileprivate func requestInfoSuccessHandler(placeMark: CLPlacemark) {
-        feedLoadingIndicatorView.set(isLoading: true)
-        viewModel.setLocationDescriptionInfo(from: placeMark)
+    fileprivate func requestInfoSuccessHandler() {
         viewModel.setEmptyDataSourceSnapshot()
-        viewModel.requestPhotosFeed { [weak self] (errorDescription) in
-            guard errorDescription == nil else {
-                self?.feedLoadingIndicatorView.set(isLoading: false)
-                return
-            }
-            self?.feedLoadingIndicatorView.set(isLoading: false, isHidden: true)
-        }
+        requestPhotosFeed()
     }
-    
 }
 
 // MARK:- CollectionView Delegate Implementation
 extension PlaceMarkDetailsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        guard elementKind == UICollectionView.elementKindSectionFooter else { return }
+        let paginationFooterView = view as! PaginationLoadingIndicatorView
+        let canLoadNextPage = viewModel.canLoadNextPage()
+        paginationFooterView.loadingIndicatorView.set(isLoading: canLoadNextPage, isHidden: !canLoadNextPage)
+        requestPhotosFeedNextPage()
+    }
     
+    
+    func updatePaginationLoadingFooter(isLoading: Bool) {
+        let paginationFooterView = collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionFooter).first as? PaginationLoadingIndicatorView
+        paginationFooterView?.loadingIndicatorView.set(isLoading: isLoading)
+    }
 }
 
 // MARK:- MapViewControllerDelegate Implementation
@@ -173,5 +207,31 @@ extension PlaceMarkDetailsViewController:  MapViewControllerDelegate {
 extension PlaceMarkDetailsViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+}
+
+
+class PaginationLoadingIndicatorView: UICollectionReusableView, LoadingIndicator {
+    var loadingIndicatorView: LoadingIndicatorView = .init()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupFeedLoadingIndicator()
+    }
+    
+    required init?(coder: NSCoder) {
+        return nil
+    }
+    
+    func setupFeedLoadingIndicator() {
+        loadingIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(loadingIndicatorView)
+        NSLayoutConstraint.activate([
+            loadingIndicatorView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            loadingIndicatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            loadingIndicatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            loadingIndicatorView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 }

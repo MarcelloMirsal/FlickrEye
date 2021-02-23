@@ -86,7 +86,7 @@ fileprivate class RouterFake: FlickrService.Router {
         self.photosFeedURLRequest = photosFeedURLRequest
     }
     
-    override func requestForPhotosFeed(atLat lat: Double, atlon lon: Double) -> URLRequest {
+    override func requestForPhotosFeed(atLat lat: Double, atlon lon: Double, page: Int) -> URLRequest {
         return URLRequest(url: photosFeedURLRequest)
     }
 }
