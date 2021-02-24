@@ -42,7 +42,7 @@ extension PlaceMarkDetailsViewController {
         let fraction = translation / ( -dismissYLocation ) * direction
         
         // to avoid animation and let collectionView scrolls down
-        if currentPresentation == .presented && collectionView.contentOffset.y > 0 {
+        if currentPresentation == .presented && collectionView.contentOffset.y > 0 && panGesture.view != draggingIndicatorView   {
             return
         }
         // stop collectionView Scrolling and begin dismissing animation

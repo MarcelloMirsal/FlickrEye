@@ -23,8 +23,12 @@ class PlaceMarkDetailsViewController: UIViewController {
     
     @IBOutlet weak var detailsBlurView: UIVisualEffectView!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet var panGesture: UIPanGestureRecognizer!
+    @IBOutlet var viewPanGesture: UIPanGestureRecognizer!
     
+    @IBOutlet var draggingPanGesture: UIPanGestureRecognizer!
+    
+    
+    @IBOutlet weak var draggingIndicatorView: UIView!
     var feedPhotoCellRegistration: UICollectionView.CellRegistration<FeedPhotoCell, FlickrPhoto>!
     var headerViewRegistration: UICollectionView.SupplementaryRegistration<PlaceMarkDetailsHeaderView>!
     var footerViewRegistration: UICollectionView.SupplementaryRegistration<PaginationLoadingIndicatorView>!
@@ -42,7 +46,7 @@ class PlaceMarkDetailsViewController: UIViewController {
     // MARK:- View's life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupPanGesture()
+        setupPanGestures()
         setupDetailsBlurViewLayer()
         setupCollectionView()
         setupCollectionViewRegistration()
@@ -114,9 +118,11 @@ class PlaceMarkDetailsViewController: UIViewController {
         viewModel.set(viewDataSource: diffableDataSource)
     }
     
-    func setupPanGesture() {
-        panGesture.delegate = self
-        panGesture.addTarget(self, action: #selector(handle(panGesture:)) )
+    func setupPanGestures() {
+        viewPanGesture.delegate = self
+        draggingPanGesture.delegate = self
+        viewPanGesture.addTarget(self, action: #selector(handle(panGesture:)) )
+        draggingPanGesture.addTarget(self, action: #selector(handle(panGesture:)))
     }
     
     func setupDetailsBlurViewLayer() {

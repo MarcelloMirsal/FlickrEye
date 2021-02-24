@@ -22,7 +22,7 @@ class PlaceMarkDetailsViewControllerTests: XCTestCase {
     }
     
     func testPanGestureDelegate_ShouldRecognizeSimultaneouslyWithOtherGestureRecognizer() {
-        let isRecognizeSimultaneous = sut.gestureRecognizer(sut.panGesture, shouldRecognizeSimultaneouslyWith: sut.collectionView.panGestureRecognizer)
+        let isRecognizeSimultaneous = sut.gestureRecognizer(sut.viewPanGesture, shouldRecognizeSimultaneouslyWith: sut.collectionView.panGestureRecognizer)
         XCTAssertTrue(isRecognizeSimultaneous)
     }
     
