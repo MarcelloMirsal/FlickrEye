@@ -40,9 +40,8 @@ extension PlaceMarkDetailsViewController {
         let direction: CGFloat = animator.isReversed ? -1 : 1
         let translation = panGesture.translation(in: view).y
         let fraction = translation / ( -dismissYLocation ) * direction
-        
         // to avoid animation and let collectionView scrolls down
-        if currentPresentation == .presented && collectionView.contentOffset.y > 0 && panGesture.view != draggingIndicatorView   {
+        if currentPresentation == .presented && collectionView.contentOffset.y > 0 && panGesture.view === collectionView  {
             return
         }
         // stop collectionView Scrolling and begin dismissing animation

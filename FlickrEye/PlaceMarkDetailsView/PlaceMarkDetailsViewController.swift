@@ -212,7 +212,7 @@ extension PlaceMarkDetailsViewController:  MapViewControllerDelegate {
 // MARK:- UIGestureRecognizerDelegate implementation
 extension PlaceMarkDetailsViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return gestureRecognizer.view === collectionView
     }
 }
 
