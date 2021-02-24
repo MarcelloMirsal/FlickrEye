@@ -3,6 +3,7 @@
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,14 +24,96 @@
                                     <outletCollection property="gestureRecognizers" destination="vAA-3D-biO" appends="YES" id="Yby-5T-hHh"/>
                                 </connections>
                             </mapView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="kHH-Pp-k9n">
+                                <rect key="frame" x="352" y="108" width="60" height="136"/>
+                                <subviews>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xLd-0j-fUI">
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tpA-Ct-Qbn">
+                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZPb-zt-m3b">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="location.fill" catalog="system" symbolScale="large"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserCurrentLocation" destination="AQt-eK-5tF" eventType="touchUpInside" id="1I9-vM-NYR"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ZPb-zt-m3b" firstAttribute="centerY" secondItem="tpA-Ct-Qbn" secondAttribute="centerY" id="CGe-mm-GC8"/>
+                                                <constraint firstItem="ZPb-zt-m3b" firstAttribute="centerX" secondItem="tpA-Ct-Qbn" secondAttribute="centerX" id="grq-6z-owp"/>
+                                                <constraint firstItem="ZPb-zt-m3b" firstAttribute="height" secondItem="tpA-Ct-Qbn" secondAttribute="height" id="krK-ND-N9H"/>
+                                                <constraint firstItem="ZPb-zt-m3b" firstAttribute="width" secondItem="tpA-Ct-Qbn" secondAttribute="width" id="uk2-0e-mf1"/>
+                                            </constraints>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="9BY-5i-zlg"/>
+                                            <constraint firstAttribute="height" constant="60" id="exE-Tc-UFu"/>
+                                        </constraints>
+                                        <blurEffect style="systemUltraThinMaterial"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </visualEffectView>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="csO-7n-LmZ">
+                                        <rect key="frame" x="0.0" y="76" width="60" height="60"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="3tD-bd-vcD">
+                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jsJ-CG-nML">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="mappin" catalog="system" symbolScale="large"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showSelectedPlaceMarkLocation" destination="AQt-eK-5tF" eventType="touchUpInside" id="Nrv-kn-dtP"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="jsJ-CG-nML" firstAttribute="centerY" secondItem="3tD-bd-vcD" secondAttribute="centerY" id="9Uu-y2-iqy"/>
+                                                <constraint firstItem="jsJ-CG-nML" firstAttribute="width" secondItem="3tD-bd-vcD" secondAttribute="width" id="IY4-kK-EK4"/>
+                                                <constraint firstItem="jsJ-CG-nML" firstAttribute="height" secondItem="3tD-bd-vcD" secondAttribute="height" id="QVr-3e-77X"/>
+                                                <constraint firstItem="jsJ-CG-nML" firstAttribute="centerX" secondItem="3tD-bd-vcD" secondAttribute="centerX" id="tMo-c6-3Fp"/>
+                                            </constraints>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="5iD-fC-RPc"/>
+                                            <constraint firstAttribute="height" constant="60" id="e4D-Z4-T0P"/>
+                                        </constraints>
+                                        <blurEffect style="systemUltraThinMaterial"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </visualEffectView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="ATB-kL-OaI"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iy5-G9-fJV"/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="kHH-Pp-k9n" firstAttribute="top" secondItem="Iy5-G9-fJV" secondAttribute="top" constant="64" id="4Uh-Ak-tI4"/>
                             <constraint firstItem="Iy5-G9-fJV" firstAttribute="trailing" secondItem="hHl-jy-lHi" secondAttribute="trailing" id="QTb-IV-JmG"/>
                             <constraint firstAttribute="bottom" secondItem="hHl-jy-lHi" secondAttribute="bottom" id="TsZ-CR-rSq"/>
                             <constraint firstItem="hHl-jy-lHi" firstAttribute="top" secondItem="rcg-6f-bL5" secondAttribute="top" id="iG2-aN-Hur"/>
                             <constraint firstItem="hHl-jy-lHi" firstAttribute="leading" secondItem="Iy5-G9-fJV" secondAttribute="leading" id="oeT-dv-Hyo"/>
+                            <constraint firstItem="Iy5-G9-fJV" firstAttribute="trailing" secondItem="kHH-Pp-k9n" secondAttribute="trailing" constant="16" id="vMm-rd-DzK"/>
                         </constraints>
                     </view>
                     <connections>
@@ -130,6 +213,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="location.fill" catalog="system" width="128" height="121"/>
+        <image name="mappin" catalog="system" width="105" height="128"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

@@ -31,6 +31,7 @@ extension PlaceMarkDetailsViewController {
                 mapView?.isUserInteractionEnabled = animator.isReversed ? false : true
                 collectionView.isScrollEnabled = animator.isReversed
                 currentFraction = 0
+                view.layoutIfNeeded()
             }
         }
     }
@@ -53,6 +54,7 @@ extension PlaceMarkDetailsViewController {
         case .began:
             animator.pauseAnimation()
             currentFraction = animator.fractionComplete
+            animator.fractionComplete =  currentFraction + fraction
         case .changed:
             animator.fractionComplete =  currentFraction + fraction
         case .ended:

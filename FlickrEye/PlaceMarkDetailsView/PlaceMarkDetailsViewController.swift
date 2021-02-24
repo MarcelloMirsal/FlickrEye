@@ -194,7 +194,6 @@ extension PlaceMarkDetailsViewController: UICollectionViewDelegate {
         requestPhotosFeedNextPage()
     }
     
-    
     func updatePaginationLoadingFooter(isLoading: Bool) {
         let paginationFooterView = collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionFooter).first as? PaginationLoadingIndicatorView
         paginationFooterView?.loadingIndicatorView.set(isLoading: isLoading)

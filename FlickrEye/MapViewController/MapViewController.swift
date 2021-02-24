@@ -48,7 +48,6 @@ class MapViewController: UIViewController {
             placeMarkDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.9)
         ])
-        
     }
     
     @discardableResult
@@ -99,6 +98,18 @@ class MapViewController: UIViewController {
         default:
             sender.isEnabled = true
         }
+    }
+    
+    @IBAction func showUserCurrentLocation() {
+        guard let location = locationManager.location else {return}
+        centerMapView(at: location)
+    }
+    
+    @IBAction func showSelectedPlaceMarkLocation() {
+        // remove the user location annotation from place mark annotation
+        guard let placeMarkAnnotation = mapView.annotations.map({$0 as? MKPointAnnotation}).compactMap({$0}).first else { return }
+        let location = CLLocation(latitude: placeMarkAnnotation.coordinate.latitude, longitude: placeMarkAnnotation.coordinate.longitude)
+        centerMapView(at: location)
     }
 }
 
