@@ -8,6 +8,16 @@
 import MapKit
 import CoreLocation
 
+extension UIAlertController {
+    static func build(withMessage message: String, title: String) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        return alertController
+    }
+}
+
+
 extension CLLocation {
     func geoLocation() -> GeoLocation {
         return .init(lat: coordinate.latitude, lon: coordinate.longitude)

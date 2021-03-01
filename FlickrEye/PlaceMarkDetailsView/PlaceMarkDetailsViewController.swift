@@ -73,10 +73,6 @@ class PlaceMarkDetailsViewController: UIViewController {
         currentPresentation = .presented
     }
     
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("did change")
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         let hSizeClass = traitCollection.horizontalSizeClass

@@ -167,10 +167,15 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        
         if manager.authorizationStatus == .authorizedWhenInUse {
             manager.startUpdatingLocation()
-        } else {
+        } else if manager.authorizationStatus == .denied {
             manager.stopUpdatingLocation()
+            let alertController = UIAlertController.build(withMessage: "please enable location service", title: "Authorization Failed")
+            present(alertController, animated: true, completion: nil)
+        } else if manager.authorizationStatus == .notDetermined {
+            manager.requestWhenInUseAuthorization()
         }
     }
     
