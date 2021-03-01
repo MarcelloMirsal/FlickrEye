@@ -7,6 +7,7 @@
 
 import MapKit
 import CoreLocation
+
 extension CLLocation {
     func geoLocation() -> GeoLocation {
         return .init(lat: coordinate.latitude, lon: coordinate.longitude)

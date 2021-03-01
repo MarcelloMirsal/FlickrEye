@@ -37,10 +37,13 @@ class PlaceMarkDetailsViewController: UIViewController {
     weak var mapView: MKMapView?
     
     lazy var dismissYLocation: CGFloat = 0
-    lazy var presentYLocation: CGFloat = 0
     var currentFraction: CGFloat = 0
     var animator: UIViewPropertyAnimator!
     var currentPresentation: PresentationMode = .dismissed
+    
+    deinit {
+        animator.removeObserver(self, forKeyPath: #keyPath(UIViewPropertyAnimator.isRunning), context: nil)
+    }
     
     
     // MARK:- View's life cycle
@@ -51,16 +54,46 @@ class PlaceMarkDetailsViewController: UIViewController {
         setupCollectionView()
         setupCollectionViewRegistration()
         setupCollectionViewDataSource()
-        setViewAtDismissPresentation()
-        setupAnimator()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        traitCollectionDidChange(nil)
     }
     
     // MARK:- setup methods
     func setViewAtDismissPresentation() {
-        presentYLocation = view.frame.origin.y
-        dismissYLocation = view.frame.height * 0.65
+        collectionView.isScrollEnabled = false
         currentPresentation = .dismissed
-        view.frame.origin.y = dismissYLocation
+        dismissYLocation = view.frame.height * 0.7
+        view.transform = .init(translationX: 0, y: dismissYLocation)
+    }
+    
+    func setViewAtPresentationForIpad() {
+        collectionView.isScrollEnabled = true
+        currentPresentation = .presented
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("did change")
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        let hSizeClass = traitCollection.horizontalSizeClass
+        let vSizeClass = traitCollection.verticalSizeClass
+        
+        if traitCollection.userInterfaceIdiom == .pad && hSizeClass == .regular && vSizeClass == .regular  {
+            animator?.stopAnimation(false)
+            animator?.finishAnimation(at: .end)
+            setViewAtPresentationForIpad()
+            view.transform = .identity
+            animator = nil
+        } else {
+            animator?.stopAnimation(false)
+            animator?.finishAnimation(at: .start)
+            setViewAtDismissPresentation()
+            setupAnimator()
+        }
     }
     
     fileprivate func setupCollectionView() {

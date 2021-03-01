@@ -19,6 +19,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
     weak var mapSelectionDelegate: MapViewControllerDelegate?
+    var placeMarkDetailsVC: PlaceMarkDetailsViewController!
     
     // MARK:- View's Life Cycle
     override func viewDidLoad() {
@@ -36,18 +37,59 @@ class MapViewController: UIViewController {
     
     // MARK:- methods
     func addPlaceMarkDetailsView() {
-        let placeMarkDetailsVC = PlaceMarkDetailsViewController.initiate(with: self)
+        placeMarkDetailsVC = PlaceMarkDetailsViewController.initiate(with: self)
         let placeMarkDetailsView = placeMarkDetailsVC.view!
         placeMarkDetailsView.translatesAutoresizingMaskIntoConstraints = false
         
         addChild(placeMarkDetailsVC)
         view.addSubview(placeMarkDetailsView)
-        NSLayoutConstraint.activate([
+        traitCollectionDidChange(nil)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        let hSizeClass = traitCollection.horizontalSizeClass
+        let vSizeClass = traitCollection.verticalSizeClass
+        
+        if hSizeClass == .compact && vSizeClass == .regular {
+            CR()
+        } else if hSizeClass == .compact && vSizeClass == .compact {
+            CC()
+        } else if hSizeClass == .regular && vSizeClass == .compact  {
+            CC()
+        } else if hSizeClass == .regular && vSizeClass == .regular {
+            CC()
+        } else {
+            fatalError()
+        }
+    }
+    
+    var currentConstraints = [NSLayoutConstraint]()
+    
+    func CR() {
+        guard let placeMarkDetailsView = placeMarkDetailsVC.view else {return}
+        let newConstraints = [
             placeMarkDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             placeMarkDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeMarkDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.9)
-        ])
+        ]
+        NSLayoutConstraint.deactivate(currentConstraints)
+        NSLayoutConstraint.activate(newConstraints)
+        currentConstraints = newConstraints
+    }
+    
+    func CC() {
+        guard let placeMarkDetailsView = placeMarkDetailsVC.view else {return}
+        let newConstraints = [
+            placeMarkDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            placeMarkDetailsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            placeMarkDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
+            placeMarkDetailsView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1)
+        ]
+        NSLayoutConstraint.deactivate(currentConstraints)
+        NSLayoutConstraint.activate(newConstraints)
+        currentConstraints = newConstraints
     }
     
     @discardableResult
@@ -113,6 +155,7 @@ class MapViewController: UIViewController {
     }
 }
 
+// MARK:- implementing CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {

@@ -13,8 +13,7 @@ extension PlaceMarkDetailsViewController {
     func setupAnimator() {
         animator = UIViewPropertyAnimator(duration: 0.7, curve: UIView.AnimationCurve.linear  )
         animator.addAnimations {
-            self.view.frame.origin.y = self.presentYLocation
-            self.mapView?.alpha = 0.85
+            self.view.transform = .identity
         }
         animator.pausesOnCompletion = true
         animator.pauseAnimation()
@@ -28,16 +27,16 @@ extension PlaceMarkDetailsViewController {
             if !animator.isRunning && animator.fractionComplete == 1 {
                 animator.isReversed = !animator.isReversed
                 currentPresentation = animator.isReversed ? .presented : .dismissed
-                mapView?.isUserInteractionEnabled = animator.isReversed ? false : true
                 collectionView.isScrollEnabled = animator.isReversed
                 currentFraction = 0
-                view.layoutIfNeeded()
             }
         }
     }
     
     @objc
     func handle(panGesture: UIPanGestureRecognizer) {
+        //        animator is nil if device is an ipad
+        guard let animator = self.animator else { return }
         let direction: CGFloat = animator.isReversed ? -1 : 1
         let translation = panGesture.translation(in: view).y
         let fraction = translation / ( -dismissYLocation ) * direction
