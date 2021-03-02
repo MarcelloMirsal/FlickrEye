@@ -10,7 +10,6 @@ import MapKit
 import CoreLocation
 
 protocol MapViewControllerDelegate: class {
-    var mapView: MKMapView? { get set  }
     func mapViewController(_ controller: MapViewController, didSelected selectedLocation: CLLocation)
 }
 
@@ -20,6 +19,7 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     weak var mapSelectionDelegate: MapViewControllerDelegate?
     var placeMarkDetailsVC: PlaceMarkDetailsViewController!
+    var currentConstraints = [NSLayoutConstraint]()
     
     // MARK:- View's Life Cycle
     override func viewDidLoad() {
@@ -27,6 +27,32 @@ class MapViewController: UIViewController {
         locationManager.delegate = self
         addPlaceMarkDetailsView()
         startLocationUpdates()
+    }
+    
+    // MARK:- Action handlers
+    @IBAction func showUserCurrentLocation() {
+        guard let location = locationManager.location else {return}
+        centerMapView(at: location)
+    }
+    
+    @IBAction func showSelectedPlaceMarkLocation() {
+        // remove the user location annotation from place mark annotation
+        guard let placeMarkAnnotation = mapView.annotations.map({$0 as? MKPointAnnotation}).compactMap({$0}).first else { return }
+        let location = CLLocation(latitude: placeMarkAnnotation.coordinate.latitude, longitude: placeMarkAnnotation.coordinate.longitude)
+        centerMapView(at: location)
+    }
+    
+    @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            sender.isEnabled = false
+            generateSuccessFeedback()
+            let selectionPoint = sender.location(in: mapView)
+            markSelectedLocation(at: selectionPoint)
+            mapSelectionDelegate?.mapViewController(self, didSelected: location(from: selectionPoint))
+        default:
+            sender.isEnabled = true
+        }
     }
     
     // MARK:- Location Manager
@@ -46,6 +72,12 @@ class MapViewController: UIViewController {
         traitCollectionDidChange(nil)
     }
     
+    fileprivate func generateSuccessFeedback() {
+        let feedbackGenerator = UINotificationFeedbackGenerator()
+        feedbackGenerator.notificationOccurred(.success)
+    }
+    
+    // MARK:- Layouts
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         let hSizeClass = traitCollection.horizontalSizeClass
@@ -53,18 +85,10 @@ class MapViewController: UIViewController {
         
         if hSizeClass == .compact && vSizeClass == .regular {
             CR()
-        } else if hSizeClass == .compact && vSizeClass == .compact {
-            CC()
-        } else if hSizeClass == .regular && vSizeClass == .compact  {
-            CC()
-        } else if hSizeClass == .regular && vSizeClass == .regular {
-            CC()
         } else {
-            fatalError()
+            CC()
         }
     }
-    
-    var currentConstraints = [NSLayoutConstraint]()
     
     func CR() {
         guard let placeMarkDetailsView = placeMarkDetailsVC.view else {return}
@@ -92,6 +116,7 @@ class MapViewController: UIViewController {
         currentConstraints = newConstraints
     }
     
+    // MARK:- Map selection & presentation 
     @discardableResult
     func markSelectedLocation(at point: CGPoint) -> MKAnnotation {
         let selectionCoordinate = coordinate(from: point)
@@ -120,38 +145,6 @@ class MapViewController: UIViewController {
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
         centerMapView(at: CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude))
-    }
-    
-    fileprivate func generateSuccessFeedback() {
-        let feedbackGenerator = UINotificationFeedbackGenerator()
-        feedbackGenerator.notificationOccurred(.success)
-    }
-    
-    // MARK:- Handlers
-    
-    @IBAction func locationSelectionHandler(_ sender: UILongPressGestureRecognizer) {
-        switch sender.state {
-        case .began:
-            sender.isEnabled = false
-            generateSuccessFeedback()
-            let selectionPoint = sender.location(in: mapView)
-            markSelectedLocation(at: selectionPoint)
-            mapSelectionDelegate?.mapViewController(self, didSelected: location(from: selectionPoint))
-        default:
-            sender.isEnabled = true
-        }
-    }
-    
-    @IBAction func showUserCurrentLocation() {
-        guard let location = locationManager.location else {return}
-        centerMapView(at: location)
-    }
-    
-    @IBAction func showSelectedPlaceMarkLocation() {
-        // remove the user location annotation from place mark annotation
-        guard let placeMarkAnnotation = mapView.annotations.map({$0 as? MKPointAnnotation}).compactMap({$0}).first else { return }
-        let location = CLLocation(latitude: placeMarkAnnotation.coordinate.latitude, longitude: placeMarkAnnotation.coordinate.longitude)
-        centerMapView(at: location)
     }
 }
 

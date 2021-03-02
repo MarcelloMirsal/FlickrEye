@@ -18,6 +18,7 @@
 		AD4B271825ACFA3400A07613 /* MapViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B271725ACFA3400A07613 /* MapViewControllerTests.swift */; };
 		AD4B273325ACFF8800A07613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4B273225ACFF8800A07613 /* MapKit.framework */; };
 		AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */; };
+		AD7790FA25EEB3F20000838E /* PaginationLoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7790F925EEB3F20000838E /* PaginationLoadingIndicatorView.swift */; };
 		AD87EBB925BEB4C400285D05 /* FlickrService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBB825BEB4C400285D05 /* FlickrService.swift */; };
 		AD87EBBD25BEB90800285D05 /* FlickrServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */; };
 		AD87EBC125C0041400285D05 /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87EBC025C0041400285D05 /* FlickrPhoto.swift */; };
@@ -63,6 +64,7 @@
 		AD4B271C25ACFAE200A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AD4B273225ACFF8800A07613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/iOSSupport/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
 		AD61EC4125AF783F00C4A36C /* PlaceMarkDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarkDetailsViewController.swift; sourceTree = "<group>"; };
+		AD7790F925EEB3F20000838E /* PaginationLoadingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationLoadingIndicatorView.swift; sourceTree = "<group>"; };
 		AD87EBB825BEB4C400285D05 /* FlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrService.swift; sourceTree = "<group>"; };
 		AD87EBBC25BEB90800285D05 /* FlickrServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrServiceTests.swift; sourceTree = "<group>"; };
 		AD87EBC025C0041400285D05 /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 		ADD4F14825C7E83A0085A22C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AD7790F925EEB3F20000838E /* PaginationLoadingIndicatorView.swift */,
 				ADD4F14425C7E8280085A22C /* LoadingIndicatorView.swift */,
 				ADD4F13E25C6FC210085A22C /* FeedPhotoCell.swift */,
 				ADD4F13F25C6FC210085A22C /* FeedPhotoCell.xib */,
@@ -405,6 +408,7 @@
 				AD4B270A25ACF86A00A07613 /* MapViewController.swift in Sources */,
 				ADD4F14025C6FC220085A22C /* FeedPhotoCell.swift in Sources */,
 				AD61EC4225AF783F00C4A36C /* PlaceMarkDetailsViewController.swift in Sources */,
+				AD7790FA25EEB3F20000838E /* PaginationLoadingIndicatorView.swift in Sources */,
 				ADEA0DE725C1DE65003B2F40 /* PlaceMarkDetailsHeaderView.swift in Sources */,
 				ADD4AD5C25AA5E0300D33DBA /* SceneDelegate.swift in Sources */,
 			);

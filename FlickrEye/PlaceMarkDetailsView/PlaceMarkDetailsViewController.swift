@@ -17,7 +17,6 @@ class PlaceMarkDetailsViewController: UIViewController {
     static func initiate(with mapViewController: MapViewController) -> PlaceMarkDetailsViewController {
         let placeMarkDetailsVC = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlaceMarkDetailsViewController") as! PlaceMarkDetailsViewController)
         mapViewController.mapSelectionDelegate = placeMarkDetailsVC
-        placeMarkDetailsVC.mapView = mapViewController.mapView
         return placeMarkDetailsVC
     }
     
@@ -34,7 +33,6 @@ class PlaceMarkDetailsViewController: UIViewController {
     var footerViewRegistration: UICollectionView.SupplementaryRegistration<PaginationLoadingIndicatorView>!
     
     let viewModel = PlaceMarkDetailsViewModel()
-    weak var mapView: MKMapView?
     
     lazy var dismissYLocation: CGFloat = 0
     var currentFraction: CGFloat = 0
@@ -44,7 +42,6 @@ class PlaceMarkDetailsViewController: UIViewController {
     deinit {
         animator.removeObserver(self, forKeyPath: #keyPath(UIViewPropertyAnimator.isRunning), context: nil)
     }
-    
     
     // MARK:- View's life cycle
     override func viewDidLoad() {
@@ -241,31 +238,5 @@ extension PlaceMarkDetailsViewController:  MapViewControllerDelegate {
 extension PlaceMarkDetailsViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return gestureRecognizer.view === collectionView
-    }
-}
-
-
-class PaginationLoadingIndicatorView: UICollectionReusableView, LoadingIndicator {
-    var loadingIndicatorView: LoadingIndicatorView = .init()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupFeedLoadingIndicator()
-    }
-    
-    required init?(coder: NSCoder) {
-        return nil
-    }
-    
-    func setupFeedLoadingIndicator() {
-        loadingIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(loadingIndicatorView)
-        NSLayoutConstraint.activate([
-            loadingIndicatorView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            loadingIndicatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            loadingIndicatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            loadingIndicatorView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="AQt-eK-5tF">
-    <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
@@ -14,18 +14,18 @@
             <objects>
                 <viewController storyboardIdentifier="MapViewController" id="AQt-eK-5tF" customClass="MapViewController" customModule="FlickrEye" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rcg-6f-bL5">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hHl-jy-lHi">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="vAA-3D-biO" appends="YES" id="Yby-5T-hHh"/>
                                 </connections>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="kHH-Pp-k9n">
-                                <rect key="frame" x="692" y="64" width="60" height="136"/>
+                                <rect key="frame" x="338" y="108" width="60" height="136"/>
                                 <subviews>
                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xLd-0j-fUI">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -109,10 +109,10 @@
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="kHH-Pp-k9n" firstAttribute="top" secondItem="Iy5-G9-fJV" secondAttribute="top" constant="64" id="4Uh-Ak-tI4"/>
-                            <constraint firstItem="Iy5-G9-fJV" firstAttribute="trailing" secondItem="hHl-jy-lHi" secondAttribute="trailing" id="QTb-IV-JmG"/>
+                            <constraint firstAttribute="trailing" secondItem="hHl-jy-lHi" secondAttribute="trailing" id="QTb-IV-JmG"/>
                             <constraint firstAttribute="bottom" secondItem="hHl-jy-lHi" secondAttribute="bottom" id="TsZ-CR-rSq"/>
                             <constraint firstItem="hHl-jy-lHi" firstAttribute="top" secondItem="rcg-6f-bL5" secondAttribute="top" id="iG2-aN-Hur"/>
-                            <constraint firstItem="hHl-jy-lHi" firstAttribute="leading" secondItem="Iy5-G9-fJV" secondAttribute="leading" id="oeT-dv-Hyo"/>
+                            <constraint firstItem="hHl-jy-lHi" firstAttribute="leading" secondItem="rcg-6f-bL5" secondAttribute="leading" id="oeT-dv-Hyo"/>
                             <constraint firstItem="Iy5-G9-fJV" firstAttribute="trailing" secondItem="kHH-Pp-k9n" secondAttribute="trailing" constant="16" id="vMm-rd-DzK"/>
                         </constraints>
                     </view>
@@ -134,13 +134,13 @@
             <objects>
                 <viewController storyboardIdentifier="PlaceMarkDetailsViewController" id="ZcL-wx-Q7F" customClass="PlaceMarkDetailsViewController" customModule="FlickrEye" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wpt-of-3NZ">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ins-zg-Vvv">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="n8c-HO-xT4">
-                                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="852"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TZ2-oY-VXq" userLabel="dragIndicator">
@@ -158,7 +158,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8Zf-jB-7MW">
-                                            <rect key="frame" x="0.0" y="40" width="768" height="984"/>
+                                            <rect key="frame" x="0.0" y="40" width="414" height="812"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="k3N-eh-g25">
                                                 <size key="itemSize" width="128" height="128"/>
@@ -192,10 +192,10 @@
                                             <exclude reference="TZ2-oY-VXq"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="gKu-Ot-ArP"/>
-                                            <exclude reference="k9G-5U-3Vl"/>
                                             <include reference="PGd-lj-Yem"/>
                                             <exclude reference="Qhw-RZ-oLD"/>
+                                            <exclude reference="gKu-Ot-ArP"/>
+                                            <exclude reference="k9G-5U-3Vl"/>
                                         </mask>
                                     </variation>
                                     <connections>
