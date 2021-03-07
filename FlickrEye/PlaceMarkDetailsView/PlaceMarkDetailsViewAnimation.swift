@@ -34,6 +34,11 @@ extension PlaceMarkDetailsViewController {
     }
     
     @objc
+    func handleApplicationStateChange() {
+        traitCollectionDidChange(nil)
+    }
+    
+    @objc
     func handle(panGesture: UIPanGestureRecognizer) {
         //        animator is nil if device is an ipad
         guard let animator = self.animator else { return }

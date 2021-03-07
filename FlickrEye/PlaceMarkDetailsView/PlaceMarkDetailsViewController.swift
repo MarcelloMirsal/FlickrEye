@@ -40,6 +40,8 @@ class PlaceMarkDetailsViewController: UIViewController {
     var currentPresentation: PresentationMode = .dismissed
     
     deinit {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
         animator.removeObserver(self, forKeyPath: #keyPath(UIViewPropertyAnimator.isRunning), context: nil)
     }
     
@@ -52,12 +54,22 @@ class PlaceMarkDetailsViewController: UIViewController {
         setupCollectionViewRegistration()
         setupCollectionViewDataSource()
     }
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         traitCollectionDidChange(nil)
+        setupApplicationStateObservation()
     }
     
     // MARK:- setup methods
+    
+    /// this method set an observer to the app state to setup the animation again when application enters the foreground state
+    fileprivate func setupApplicationStateObservation() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(handleApplicationStateChange), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
     func setViewAtDismissPresentation() {
         collectionView.isScrollEnabled = false
         currentPresentation = .dismissed
